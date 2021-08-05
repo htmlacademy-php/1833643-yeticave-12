@@ -30,15 +30,13 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
             <nav class="user-menu">
 
                 <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
-                <?php
-                if ($is_auth): ?>
+                <?php if ($is_auth): ?>
                     <div class="user-menu__logged">
                         <p><?= $user_name; ?></p>
                         <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
                         <a class="user-menu__logout" href="#">Выход</a>
                     </div>
-                <?php
-                else: ?>
+                <?php else: ?>
                     <ul class="user-menu__list">
                         <li class="user-menu__item">
                             <a href="#">Регистрация</a>
@@ -47,8 +45,7 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
                             <a href="#">Вход</a>
                         </li>
                     </ul>
-                <?php
-                endif; ?>
+                <?php endif; ?>
             </nav>
         </div>
     </header>
@@ -59,7 +56,7 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
             <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и
                 горнолыжное снаряжение.</p>
             <ul class="promo__list">
-                <?php
+                <?php 
                 $categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
                 $units = [
                     [
@@ -101,13 +98,11 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
                 ];
                 ?>
                 <!--заполните этот список из массива категорий-->
-                <?php
-                foreach ($categories as $category): ?>
+                <?php foreach ($categories as $category): ?>
                     <li class="promo__item promo__item--boards">
                         <a class="promo__link" href="pages/all-lots.html"><?= $category; ?> </a>
                     </li>
-                <?php
-                endforeach; ?>
+                <?php endforeach; ?>
             </ul>
         </section>
         <section class="lots">
@@ -116,8 +111,7 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
             </div>
             <ul class="lots__list">
                 <!--заполните этот список из массива с товарами-->
-                <?php
-                foreach ($units as $unit): ?>
+                <?php foreach ($units as $unit): ?>
                     <li class="lots__item lot">
                         <div class="lot__image">
                             <img src="<?= $unit['image']; ?>" width="350" height="260" alt="">
@@ -137,8 +131,7 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
                             </div>
                         </div>
                     </li>
-                <?php
-                endforeach; ?>
+                <?php endforeach; ?>
             </ul>
         </section>
     </main>
@@ -148,13 +141,11 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php
-            foreach ($categories as $category): ?>
+            <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
                     <a href="pages/all-lots.html"><?= $category; ?></a>
                 </li>
-            <?php
-            endforeach; ?>
+            <?php endforeach; ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">
