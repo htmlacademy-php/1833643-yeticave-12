@@ -56,7 +56,17 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
             <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и
                 горнолыжное снаряжение.</p>
             <ul class="promo__list">
-                <?php 
+                <?php
+                function format_amount($amount)
+                {
+                    $amount = ceil($amount);
+                    if ($amount >= 1000) {
+                        $amount = number_format($amount, 0, ".", " ");
+                    }
+                    $result = "{$amount} ₽";
+                    return $result;
+                }
+
                 $categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
                 $units = [
                     [
@@ -123,7 +133,8 @@ $user_name = 'IgorGrinev'; // укажите здесь ваше имя
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
-                                    <span class="lot__cost"><?= $unit['price']; ?><b class="rub">р</b></span>
+                                    <span class="lot__cost"><?= format_amount($unit['price']); ?></span>
+                                    <!--<b class="rub">р</b>-->
                                 </div>
                                 <div class="lot__timer timer">
                                     12:23
