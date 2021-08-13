@@ -4,14 +4,24 @@ require_once('helpers.php');
 $is_auth = rand(0, 1);
 $user_name = 'IgorGrinev'; // укажите здесь ваше имя
 
+//защита от XSS
+function e($string)
+{
+    return htmlspecialchars($string);
+}
+
 function format_amount($amount)
 {
     $amount = ceil($amount);
     if ($amount >= 1000) {
         $amount = number_format($amount, 0, ".", " ");
     }
-    $result = "{$amount} ₽";
-    return $result;
+
+    return "{$amount} ₽";
+    /**еще короче можно
+     * return number_format(ceil($amount),0, '.',' ').' ₽';
+     * но по условию задания мы проверяем if ($amount >= 1000)
+     */
 }
 
 $categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
@@ -53,16 +63,11 @@ $units = [
         'image' => 'img/lot-6.jpg'
     ]
 ];
-$page_content = include_template('main.php', $data = ['categories' => $categories, 'units' => $units]);
-$page = include_template('layout.php',
-                         $data = [
-                             'categories' => $categories,
-                             'units' => $units,
-                             'page_content' => $page_content,
-                             'page_name' => 'Главная',
-                             'user_name' => $user_name,
-                             'is_auth' => $is_auth
-                         ]
+$title = 'Главная';
+$page_content = include_template('main.php', compact('categories', 'units'));
+$page = include_template(
+    'layout.php',
+    compact('categories', 'categories', 'units', 'page_content', 'title', 'user_name', 'is_auth')
 );
 print($page);
 ?>
