@@ -10,28 +10,34 @@ function e($string)
     return htmlspecialchars($string);
 }
 
+/**
+ * @param $amount
+ * @return string
+ */
 function format_amount($amount)
 {
     $amount = ceil($amount);
     if ($amount >= 1000) {
         $amount = number_format($amount, 0, ".", " ");
     }
-    /** А что не так здесь?
-     * посмотрел мануал PSR12. Там if так форматируется, отступ блока четыре пробела.
-     */
     return "{$amount} ₽";
 }
 
-function countdown($date)
+
+/**
+ *
+ * @param $fin_time => 'ГГГГ-ММ-ДД'
+ * @return array['$h' => 'string','$m' => 'string'])]
+ *
+ */
+function countdown($fin_time) //однообразил с ключом массива Units
 {
-    //date_default_timezone_set('Europe/Moscow');
     date_default_timezone_set('Europe/Kaliningrad');
-    $fin_date = strtotime($date);//дата истечения срока
-    $today = time();//текущее время
-    $h = '00';//по умолчанию часы вышли
-    $m = '00';//по умолчанию минуты вышли
-    if ($fin_date > $today) {
-        $s = $fin_date - $today;//осталось секунд
+    //про константу не совсем понял, что куда вынести
+    $deadline = strtotime($fin_time);//дата истечения срока
+    $currentTime = time();//текущее время
+    if ($deadline > $currentTime) {
+        $s = $deadline - $currentTime;//осталось секунд до дедлайна
         $h = floor($s / 60 / 60);//осталось часов
         $m = floor($s / 60) - ($h * 60);//осталось минут
         if ($h < 10) {
@@ -40,9 +46,12 @@ function countdown($date)
         if ($m < 10) {
             $m = str_pad($m, 2, "0", STR_PAD_LEFT); // Добавляем лидирующий ноль
         }
+    } else {
+        $h = $m = '00';//время вышло
     }
+    settype($h, "string");
+    settype($m, "string");
 
-    //return [$hours, $minutes];;
     return [$h, $m];
 }
 

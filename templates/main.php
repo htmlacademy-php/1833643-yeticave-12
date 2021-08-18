@@ -25,7 +25,6 @@
                 <div class="lot__info">
                     <span class="lot__category"><?= e($unit['category']); ?></span>
                     <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= e($unit['name']); ?></a>
-                        <!--Перенос был на 93м символе. В настройках 120 стоит. Собрал функцию в целое, реформат не рвет ее, что это было, непонятно. -->
                     </h3>
                     <div class="lot__state">
                         <div class="lot__rate">
@@ -34,8 +33,7 @@
                         </div>
                         <div class="lot__timer timer <?= e(
                             countdown($unit['fin_time'])[0]
-                        ) == '00' ? 'timer--finishing' : '' ?>">
-                        <!--здесь автоформатирование разорвало одну строку на три части -->
+                        ) === '00' ? 'timer--finishing' : '' ?>">
                             <?= e(countdown($unit['fin_time'])[0]); ?>:
                             <?= e(countdown($unit['fin_time'])[1]); ?>
                         </div>
