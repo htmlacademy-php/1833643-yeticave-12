@@ -11,7 +11,7 @@ function e($string)
 }
 
 /**
- * @param $amount
+ * @param int $amount
  * @return string
  */
 function format_amount($amount)
@@ -23,14 +23,16 @@ function format_amount($amount)
     return "{$amount} ₽";
 }
 
+format_amount(20);
+
 
 /**
  *
- * @param $fin_time => 'ГГГГ-ММ-ДД'
+ * @param string $fin_time => 'ГГГГ-ММ-ДД'
  * @return array['$h' => 'string','$m' => 'string'])]
  *
  */
-function countdown($fin_time) //однообразил с ключом массива Units
+function countdown(string $fin_time) //однообразил с ключом массива Units
 {
     date_default_timezone_set('Europe/Kaliningrad');
     //про константу не совсем понял, что куда вынести
@@ -49,10 +51,8 @@ function countdown($fin_time) //однообразил с ключом масс�
     } else {
         $h = $m = '00';//время вышло
     }
-    settype($h, "string");
-    settype($m, "string");
 
-    return [$h, $m];
+    return [(string)$h, (string)$m];
 }
 
 $categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
