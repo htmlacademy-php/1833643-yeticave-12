@@ -1,6 +1,7 @@
 <?php
 
 require_once('helpers.php');
+define("TIMEZONE", "Europe/Kaliningrad");
 $is_auth = rand(0, 1);
 $user_name = 'IgorGrinev'; // укажите здесь ваше имя
 
@@ -14,7 +15,7 @@ function e($string)
  * @param int $amount
  * @return string
  */
-function format_amount($amount)
+function format_amount(int $amount): string
 {
     $amount = ceil($amount);
     if ($amount >= 1000) {
@@ -23,7 +24,7 @@ function format_amount($amount)
     return "{$amount} ₽";
 }
 
-format_amount(20);
+//testing of function. I forgot to remove the test result.
 
 
 /**
@@ -32,10 +33,10 @@ format_amount(20);
  * @return array['$h' => 'string','$m' => 'string'])]
  *
  */
-function countdown(string $fin_time) //однообразил с ключом массива Units
+#[ArrayShape (['$h' => 'string', '$m' => 'string'])]
+function countdown(string $fin_time): array //однообразил с ключом массива Units
 {
-    date_default_timezone_set('Europe/Kaliningrad');
-    //про константу не совсем понял, что куда вынести
+    date_default_timezone_set(TIMEZONE);
     $deadline = strtotime($fin_time);//дата истечения срока
     $currentTime = time();//текущее время
     if ($deadline > $currentTime) {
