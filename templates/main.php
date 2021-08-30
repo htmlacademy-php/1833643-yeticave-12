@@ -29,10 +29,10 @@
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?= e(format_amount($unit['price'])); ?></span>
+                            <span class="lot__cost"><?= e(formatAmount($unit['price'])); ?></span>
                         </div>
                         <div class="lot__timer timer
-                        <?= $countdown = countdown($unit['fin_time']); ?>
+                        <?= $countdown = countdown($unit['finTime']); ?>
                         <?= ($countdown[0]) === '00' ? 'timer--finishing' : '' ?>">
                             <?= e($countdown[0]); ?>:
                             <?= e($countdown[1]); ?>
