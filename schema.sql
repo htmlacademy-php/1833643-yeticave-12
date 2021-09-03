@@ -1,6 +1,6 @@
 CREATE TABLE `bets`
 (
-  `id`         int(11)   ,
+  `id`         int(11)   auto_increment,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `amount`     int(11)   NOT NULL,
@@ -12,24 +12,16 @@ CREATE TABLE `bets`
 
 CREATE TABLE `categories`
 (
-  `id`          int(11)  ,
+  `id`          int(11)  auto_increment,
   `name`        char(64) NOT NULL,
   `symbol_code` char(32) NOT NULL,
   PRIMARY KEY (ID)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `categories` (`id`, `name`, `symbol_code`)
-VALUES (1, 'Доски и лыжи', 'boards'),
-       (2, 'Крепления', 'attachment'),
-       (3, 'Ботинки', 'boots'),
-       (4, 'Одежда', 'clothing'),
-       (5, 'Инструменты', 'tools'),
-       (6, 'Разное', 'other');
-
 CREATE TABLE `lots`
 (
-  `id`              int(11)      ,
+  `id`              int(11)      auto_increment,
   `created_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `name`            varchar(255) NOT NULL,
@@ -47,7 +39,7 @@ CREATE TABLE `lots`
 
 CREATE TABLE `users`
 (
-  `id`         int(11)      ,
+  `id`         int(11)      auto_increment,
   `created_at` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `email`      text         NOT NULL,
@@ -75,7 +67,6 @@ ALTER TABLE `lots`
   ADD CONSTRAINT `lots_ibfk_2` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`);
 
 ALTER TABLE `bets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
   ADD CONSTRAINT `bets_ibfk_1` FOREIGN KEY (`lots_id`) REFERENCES `lots` (`id`),
   ADD CONSTRAINT `bets_ibfk_2` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`);
 
