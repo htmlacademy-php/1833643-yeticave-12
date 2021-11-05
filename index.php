@@ -1,5 +1,10 @@
 <?php
 
+$con = mysqli_connect("localhost", "root", "", "yeticave");
+//$sql = "SELECT id, name FROM lots";
+//$result = mysqli_query($con, $sql);
+//$rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 require_once('helpers.php');
 define("TIMEZONE", "Europe/Kaliningrad");
 $isAuth = rand(0, 1);
@@ -56,51 +61,23 @@ function countdown(string $finTime): array //однообразил с ключ�
     return [(string)$h, (string)$m];
 }
 
-$categories = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
-$units = [
-    [
-        'name' => '2014 Rossignol District Snowboard',
-        'category' => 'Доски и лыжи',
-        'price' => 10999,
-        'finTime' => '2021-08-23',
-        'image' => 'img/lot-1.jpg'
-    ],
-    [
-        'name' => 'DC Ply Mens 2016/2017 Snowboard',
-        'category' => 'Доски и лыжи',
-        'price' => 159999,
-        'finTime' => '2021-08-18',
-        'image' => 'img/lot-2.jpg'
-    ],
-    [
-        'name' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-        'category' => 'Крепления',
-        'price' => 8000,
-        'finTime' => '2021-08-19',
-        'image' => 'img/lot-3.jpg'
-    ],
-    [
-        'name' => 'Ботинки для сноуборда DC Mutiny Charocal',
-        'category' => 'Ботинки',
-        'price' => 10999,
-        'finTime' => '2021-08-20',
-        'image' => 'img/lot-4.jpg'
-    ],
-    [
-        'name' => 'Куртка для сноуборда DC Mutiny Charocal',
-        'category' => 'Одежда',
-        'price' => 7500,
-        'finTime' => '2021-08-21',
-        'image' => 'img/lot-5.jpg'
-    ],
-    [
-        'name' => 'Маска Oakley Canopy',
-        'category' => 'Разное',
-        'price' => 5400,
-        'finTime' => '2021-08-22',
-        'image' => 'img/lot-6.jpg'
-    ]
-];
+$sql = "SELECT name, symbol_code FROM categories";
+$result = mysqli_query($con, $sql);
+$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+$sql = "SELECT lots.id,
+            lots.name            as name,
+            lots.image_url            as image,
+            lots.initial_price        as price,
+            categories.name      as category,
+            lots.completion_date      as finTime
+        FROM lots
+        INNER JOIN categories ON lots.categories_id = categories.id
+    WHERE completion_date > now() ";
+$result = mysqli_query($con, $sql);
+$units = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+
 $title = 'Главная';
 $pageContent = include_template('main.php', compact('categories', 'units'));
 $page = include_template(
