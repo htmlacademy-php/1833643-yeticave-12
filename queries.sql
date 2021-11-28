@@ -17,11 +17,11 @@ VALUES ('user1@mail.ru', 'user1', 'password'),
 # существующий список объявлений;
 INSERT INTO `lots`( `name`, `image_url`, `initial_price`, `completion_date`, `bet_step`, `author_users_id`,
             `categories_id`)
-VALUES ('2014 Rossignol District Snowboard', 'img/lot-1.jpg', 10999, '2021-10-23', 1, 1, 1),
-       ('DC Ply Mens 2016/2017 Snowboard', 'img/lot-2.jpg', 15999, '2021-11-18', 1, 1, 1),
-       ('Крепления Union Contact Pro 2015 года размер L/XL', 'img/lot-3.jpg', 8000, '2021-11-19', 1, 1, 2),
-       ('Ботинки для сноуборда DC Mutiny Charocal', 'img/lot-4.jpg', 10999, '2021-11-20', 1, 1, 3),
-       ('Куртка для сноуборда DC Mutiny Charocal', 'img/lot-5.jpg', 7500, '2021-11-21', 1, 1, 4),
+VALUES ('2014 Rossignol District Snowboard', 'img/lot-1.jpg', 10999, '2021-12-23', 1, 1, 1),
+       ('DC Ply Mens 2016/2017 Snowboard', 'img/lot-2.jpg', 15999, '2021-12-18', 1, 1, 1),
+       ('Крепления Union Contact Pro 2015 года размер L/XL', 'img/lot-3.jpg', 8000, '2021-12-01', 1, 1, 2),
+       ('Ботинки для сноуборда DC Mutiny Charocal', 'img/lot-4.jpg', 10999, '2021-11-30', 1, 1, 3),
+       ('Куртка для сноуборда DC Mutiny Charocal', 'img/lot-5.jpg', 7500, '2021-11-29', 1, 1, 4),
        ('Маска Oakley Canopy', 'img/lot-6.jpg', 5400, '2021-10-22', 1, 1, 6)
 
 # добавьте пару ставок для любого объявления
