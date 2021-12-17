@@ -1,6 +1,6 @@
 <?php
 
-$con = mysqli_connect("localhost", "root", "", "yeticave");
+$con = mysqli_connect("localhost", "root", "root", "yeticave");
 
 require_once('helpers.php');
 

@@ -192,3 +192,14 @@ function formatAmount(int $amount): string
     }
     return "{$amount} ₽";
 }
+
+function getCategories(mysqli $con): array
+{
+    $sql = "SELECT name, symbol_code as id FROM categories";
+    $categories = [];
+    $res = mysqli_query($con, $sql);
+    while ($res && $row = $res->fetch_assoc()) {
+        $categories[] = $row;
+    }
+    return $categories;
+}
