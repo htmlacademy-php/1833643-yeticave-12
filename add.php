@@ -2,6 +2,7 @@
 
 $con = mysqli_connect("localhost", "root", "root", "yeticave");
 require_once('helpers.php');
+require_once 'check_err.php';
 $required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 $errors = array();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
@@ -18,39 +19,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
         }
     }
     $name = readPOST('lot-name');
+    if (isCorrectLength($name, 1, 10)) {
+        $errors['lot-name'] = isCorrectLength($name, 1, 10);
+    }
     $category = (int)readPOST('category');
     $message = readPOST('message');
     $lot_rate = (int)readPOST('lot-rate');
+    if (validateNaturalNum($lot_rate)) {
+        $errors['lot-rate'] = validateNaturalNum($lot_rate);
+    }
+
     $lot_step = (int)readPOST('lot-step');
+    if (validateNaturalNum($lot_step)) {
+        $errors['lot-step'] = validateNaturalNum($lot_step);
+    }
     $lot_date = readPOST('lot-date');
-    if (null !== $name) {
-        if (strlen($name) <= 0 || strlen($name) > 10) {
-            $errors['lot-name'] = 'Длина имени лота должна быть от 0 до 10 символов';
-        }
+    if (validateDate($lot_date)) {
+        $errors['lot-date'] = validateDate($date);
     }
-    if (null !== $lot_date) {
-        if (false === is_date_valid($lot_date)) {
-            $errors['lot-date'] = 'Неверный формат даты';
-        } else {
-            $time_now = strtotime("now");
-            $experation_stamp = strtotime($lot_date);
-            $diff_time = $experation_stamp - $time_now;
-            $day = 86400;
-            if ($diff_time < $day) {
-                $errors['lot-date'] = 'Указанная дата должна быть больше текущей даты, хотя бы на один день';
-            }
-        }
-    }
-    if (null !== $lot_rate) {
-        if (!is_int($lot_rate) || $lot_rate <= 0) {
-            $errors['lot-rate'] = 'Введите целое число больше нуля';
-        }
-    }
-    if (null !== $lot_step) {
-        if (!is_int($lot_step) || $lot_step <= 0) {
-            $errors['lot-step'] = 'Введите целое число больше нуля';
-        }
-    }
+
+//    if (null !== $lot_date) {
+//        if (!is_date_valid($lot_date)) {
+//            $errors['lot-date'] = 'Неверный формат даты';
+//        } else {
+//            $time_now = strtotime("now");
+//            $experation_stamp = strtotime($lot_date);
+//            $diff_time = $experation_stamp - $time_now;
+//            $day = 86400;
+//            if ($diff_time < $day) {
+//                $errors['lot-date'] = 'Указанная дата должна быть больше текущей даты, хотя бы на один день';
+//            }
+//        }
+//    }
+
     if (isset($_FILES['file']) && !($_FILES['file']['error'] === UPLOAD_ERR_OK)) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_name = $_FILES['file']['tmp_name'];
@@ -74,37 +75,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
             $data = [$name, $message, $file_path, $lot_rate, $lot_date, $lot_step, $category]
         );
         mysqli_stmt_execute($stmt);
-        //Редирект, если нет ошибок
+        //Redirect if not errors
         $last_id = mysqli_insert_id($con);
         header("Location: lot.php?id=" . $last_id);
         exit ();
     }
 }
 
-
-function readPOST($key)
-{
-    if (isset($_POST[$key]) && $_POST[$key]) {
-        trim($_POST[$key]);
-        if (empty($_POST[$key])) {
-            return null;
-        } else {
-            return $_POST[$key];
-        }
-    } else {
-        return null;
-    };
-}
-
-$isAuth = rand(0, 1);
-
-
-
 $categories = getCategories($con);
 
-
 $pageContent = include_template('add-lot.php', compact('categories', 'errors'));
-$page = include_template('layout.php', compact('categories','pageContent'));
+$page = include_template('layout.php', compact('categories', 'pageContent','isAuth','userName'));
 
 print($page);
 

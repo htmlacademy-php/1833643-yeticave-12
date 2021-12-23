@@ -23,7 +23,7 @@
                         <option value = "<?= $category['id'] ?>" <?= $category['id'] == readPOST('category') ? "selected" : ""?>><?= $category['name'] ?></option>
                     <?php endforeach; ?>
                 </select>
-                <span class="form__error"><?= isset($errors["category"]) ? $errors["category"] : ""?></span>
+                <span class="form__error"><?= ($errors["category"]) ?? ""?></span>
             </div>
         </div>
         <div class="form__item form__item--wide <?= isset($errors["message"]) ? "form__item--invalid" : ""; ?>">
