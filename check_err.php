@@ -1,5 +1,6 @@
 <?php
 require_once 'helpers.php';
+
 /**
  * @param $name
  * @param $min
@@ -59,18 +60,37 @@ function validateNaturalNum($num)
     }
 }
 
+/**
+ * @param $key
+ * @return mixed|null
+ */
 function readPOST($key)
 {
-if (isset($_POST[$key]) && $_POST[$key]) {
-trim($_POST[$key]);
-if (empty($_POST[$key])) {
-return null;
-} else {
-return $_POST[$key];
-}
-} else {
-return null;
-};
+    if (isset($_POST[$key]) && $_POST[$key]) {
+        trim($_POST[$key]);
+        if (empty($_POST[$key])) {
+            return null;
+        } else {
+            return $_POST[$key];
+        }
+    } else {
+        return null;
+    }
 }
 
+/**
+ * @param string $name
+ * @return string
+ */
+function getPostVal(string $name): string {
+    return $_POST[$name] ?? "";
+}
+
+/**
+ * @param string $name
+ * @return string
+ */
+function getFilteredPostVal(string $name): string {
+    return e(getPostVal($name)) ?? "";
+}
 ?>

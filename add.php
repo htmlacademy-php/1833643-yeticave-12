@@ -38,20 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
         $errors['lot-date'] = validateDate($date);
     }
 
-//    if (null !== $lot_date) {
-//        if (!is_date_valid($lot_date)) {
-//            $errors['lot-date'] = 'Неверный формат даты';
-//        } else {
-//            $time_now = strtotime("now");
-//            $experation_stamp = strtotime($lot_date);
-//            $diff_time = $experation_stamp - $time_now;
-//            $day = 86400;
-//            if ($diff_time < $day) {
-//                $errors['lot-date'] = 'Указанная дата должна быть больше текущей даты, хотя бы на один день';
-//            }
-//        }
-//    }
-
     if (isset($_FILES['file']) && !($_FILES['file']['error'] === UPLOAD_ERR_OK)) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_name = $_FILES['file']['tmp_name'];
