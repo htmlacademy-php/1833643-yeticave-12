@@ -1,8 +1,7 @@
 <?php
 
-$con = mysqli_connect("localhost", "root", "", "yeticave");
+$con = mysqli_connect("localhost", "root", "root", "yeticave");
 require_once('helpers.php');
-//require_once('index.php');
 
 $is_auth = rand(0, 1);
 $userName = 'IgorGrinev'; // укажите здесь ваше имя
@@ -32,10 +31,10 @@ function getUnit(mysqli $con, $id): array
 {
     $sql = "SELECT lots.id,
        lots.name as name,
-       image_url,
-       completion_date,
-       initial_price,
-       description,
+       lots.image_url,
+       lots.completion_date,
+       lots.initial_price,
+       lots.description,
        categories.name as category
         FROM lots
         INNER JOIN categories ON lots.categories_id = categories.id
@@ -50,23 +49,11 @@ function getUnit(mysqli $con, $id): array
     return $unit;
 }
 
-
-function getCategories(mysqli $con): array
-{
-    $sql = "SELECT name, symbol_code FROM categories";
-    $categories = [];
-    $res = mysqli_query($con, $sql);
-    while ($res && $row = $res->fetch_assoc()) {
-        $categories[] = $row;
-    }
-    return $categories;
-}
-
 $categories = getCategories($con);
 
 $item = getUnit($con, $id);
 
-$pageContent = include_template('TempLot.php', compact('categories','item' , 'unit'));
+$pageContent = include_template('TempLot.php', compact('categories', 'item', 'unit'));
 $page = include_template(
     'layout.php',
     compact('categories', 'categories', 'units', 'pageContent', 'title', 'userName', 'isAuth')
