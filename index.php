@@ -1,11 +1,10 @@
 <?php
-
+session_start();
 $con = mysqli_connect("localhost", "root", "root", "yeticave");
 
 require_once('helpers.php');
-
-$isAuth = rand(0, 1);
-$userName = 'IgorGrinev'; // укажите здесь ваше имя
+//$isAuth = $_SESSION['userId'] ?? 0;
+//$userName = $_SESSION['userName'] ?? '';
 
 $sql = "SELECT name, symbol_code FROM categories";
 $result = mysqli_query($con, $sql);
@@ -28,7 +27,10 @@ $title = 'Главная';
 $pageContent = include_template('main.php', compact('categories', 'units'));
 $page = include_template(
     'layout.php',
-    compact('categories', 'categories', 'units', 'pageContent', 'title', 'userName', 'isAuth')
+    compact('categories', 'categories', 'units', 'pageContent', 'title'
+    //,
+    //'userName', 'isAuth'
+    )
 );
 print($page);
 ?>

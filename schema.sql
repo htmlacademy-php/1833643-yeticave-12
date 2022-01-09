@@ -1,6 +1,6 @@
 CREATE TABLE `bets`
 (
-  `id`         int(11)   auto_increment,
+  `id`         int(11) auto_increment,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `amount`     int(11)   NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE `bets`
 
 CREATE TABLE `categories`
 (
-  `id`          int(11)  auto_increment,
+  `id`          int(11) auto_increment,
   `name`        char(64) NOT NULL,
   `symbol_code` char(32) NOT NULL,
   PRIMARY KEY (ID)
@@ -21,7 +21,7 @@ CREATE TABLE `categories`
 
 CREATE TABLE `lots`
 (
-  `id`              int(11)      auto_increment,
+  `id`              int(11) auto_increment,
   `created_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `name`            varchar(255) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE `lots`
 
 CREATE TABLE `users`
 (
-  `id`         int(11)      auto_increment,
+  `id`         int(11) auto_increment,
   `created_at` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `email`      text         NOT NULL,

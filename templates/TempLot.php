@@ -3,20 +3,20 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?=e($category['name']) ?></a>
+                    <a href="pages/all-lots.html"><?= e($category['name']) ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
     </nav>
     <section class="lot-item container">
-        <h2><?=e($item['name']) ?></h2>
+        <h2><?= e($item['name']) ?></h2>
         <div class="lot-item__content">
             <div class="lot-item__left">
                 <div class="lot-item__image">
-                    <img src="<?=$item['image_url'] ?>" width="730" height="548" alt="<?=e($item['name']) ?>">
+                    <img src="<?= $item['image_url'] ?>" width="730" height="548" alt="<?= e($item['name']) ?>">
                 </div>
-                <p class="lot-item__category">Категория: <span><?=e($item['category']) ?></span></p>
-                <p class="lot-item__description"><?=e($item['description']) ?></p>
+                <p class="lot-item__category">Категория: <span><?= e($item['category']) ?></span></p>
+                <p class="lot-item__description"><?= e($item['description']) ?></p>
             </div>
             <div class="lot-item__right">
                 <div class="lot-item__state">
@@ -29,7 +29,7 @@
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?=e(formatAmount($item['initial_price'])) ?></span>
+                            <span class="lot-item__cost"><?= e(formatAmount($item['initial_price'])) ?></span>
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка <span>12 000 р</span>
