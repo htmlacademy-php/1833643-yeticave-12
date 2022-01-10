@@ -1,14 +1,14 @@
 <?php
 
 $con = mysqli_connect("localhost", "root", "root", "yeticave");
-require_once('helpers.php');
+require_once 'helpers.php';
 require_once 'check_err.php';
 $required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 $errors = array();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
     error_reporting(E_ALL);
 
-    $isAuth = rand(0, 1);
+    $isAuth = 0;
     $userName = 'IgorGrinev'; // укажите здесь ваше имя
     $title = 'Добавление лота';
 
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
 $categories = getCategories($con);
 
 $pageContent = include_template('add-lot.php', compact('categories', 'errors'));
-$page = include_template('layout.php', compact('categories', 'pageContent','isAuth','userName'));
+$page = include_template('layout.php', compact('categories', 'pageContent', 'isAuth', 'userName'));
 
 print($page);
 

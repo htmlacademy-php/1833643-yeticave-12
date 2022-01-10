@@ -82,7 +82,8 @@ function readPOST($key)
  * @param string $name
  * @return string
  */
-function getPostVal(string $name): string {
+function getPostVal(string $name): string
+{
     return $_POST[$name] ?? "";
 }
 
@@ -90,7 +91,9 @@ function getPostVal(string $name): string {
  * @param string $name
  * @return string
  */
-function getFilteredPostVal(string $name): string {
+function getFilteredPostVal(string $name): string
+{
     return e(getPostVal($name)) ?? "";
 }
+
 ?>
