@@ -37,6 +37,8 @@ CREATE TABLE `lots`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+CREATE FULLTEXT INDEX lot_ft_search ON lots(name, description);
+
 CREATE TABLE `users`
 (
   `id`         int(11) auto_increment,

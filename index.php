@@ -3,6 +3,7 @@ session_start();
 $con = mysqli_connect("localhost", "root", "root", "yeticave");
 
 require_once('helpers.php');
+require_once 'check_err.php';
 //$isAuth = $_SESSION['userId'] ?? 0;
 //$userName = $_SESSION['userName'] ?? '';
 

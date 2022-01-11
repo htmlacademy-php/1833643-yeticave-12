@@ -4,8 +4,6 @@ require_once 'helpers.php';
 require_once 'check_err.php';
 
 $categories = getCategories($con);
-//$isAuth = 0;
-//$userName = 'IgorGrinev'; // enter your name here
 $title = 'Вход';
 
 
@@ -25,10 +23,9 @@ $rules = [
         mysqli_stmt_bind_param($stmt, 's', getPostVal('email'));
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
-        print_r($result);
-        $exist_email = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $existEmail = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-        if (!$exist_email) {
+        if (!$existEmail) {
             return 'Пользователь с таким email еще не зарегистрирован';
         }
 
@@ -45,9 +42,9 @@ $rules = [
         mysqli_stmt_bind_param($stmt, 's', getPostVal('email'));
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
-        $exist_email = mysqli_fetch_assoc($result);
+        $existEmail = mysqli_fetch_assoc($result);
 
-        if (!password_verify(getPostVal('password'), $exist_email['password'])) {
+        if (!password_verify(getPostVal('password'), $existEmail['password'])) {
             return 'Вы ввели неверный пароль';
         }
 
@@ -57,22 +54,20 @@ $rules = [
 
 $errors = [];
 
-if (isset($_POST['submit'])) {  //Если есть такое поле в POST, значит форма отправлена
+if (isset($_POST['submit'])) {  //If there is such a field in the POST, then the form has been sent
 
-    //Валидация соответствующих полей и сохранение ошибок (при наличии)
+    //Validation of relevant fields and saving errors (if any)
     foreach ($_POST as $key => $value) {
         if (isset($rules[$key])) {
             $rule = $rules[$key];
             $errors[$key] = $rule();
         }
     }
-    $errors = array_filter($errors);  //убираем пустые значения в массиве
-    //Если были ошибки валидации - возвращаем на страницу добавления нового аккаунта с показом ошибок
+    $errors = array_filter($errors);  //removing empty values in the array
+    //If there were validation errors, we return to the page for adding a new account with errors displayed.
     if ($errors) {
         $pageContent = include_template('login.php', compact('categories', 'errors'));
-        $page = include_template('layout.php', compact('categories', 'pageContent', 'title'
-        //, 'userName' , 'isAuth'
-        ));
+        $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
         print($page);
     } else {
         $sql = "SELECT id,name FROM users WHERE email = ?";
@@ -92,10 +87,10 @@ if (isset($_POST['submit'])) {  //Если есть такое поле в POST,
             print($_SESSION['userName']);
         }
 
-        //Перенаправляем на страницу входа в личный кабинет
+        // redirect to the login page of personal account
         header('Location: index.php');
     }
-} else {  //Если форма не отправлена, показываем страницу создания аккаунта
+} else {  //If the form has not submitted,  show the account creation page
     $pageContent = include_template('login.php', compact('categories', 'errors'));
     $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
     print($page);
