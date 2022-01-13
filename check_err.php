@@ -30,7 +30,8 @@ function validateFilled($name)
  * @param string $name
  * @return string|null
  */
-function validateFilledGET(string $name): ?string {
+function validateFilledGET(string $name): ?string
+{
     if (empty($_GET[$name])) {
         return 'Поле не заполнено ';
     }
@@ -42,7 +43,8 @@ function validateFilledGET(string $name): ?string {
  * @param string $name
  * @return string
  */
-function filteredGET(string $name): string {
+function filteredGET(string $name): string
+{
     return e($_GET[$name]) ?? "";
 }
 
@@ -120,7 +122,8 @@ function getFilteredPostVal(string $name): string
  * @param array $hoursMinuts
  * @return string
  */
-function getTimerValue(array $hoursMinuts): string {
+function getTimerValue(array $hoursMinuts): string
+{
     return implode(':', $hoursMinuts) ?? "";
 }
 

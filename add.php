@@ -1,8 +1,8 @@
 <?php
-
-$con = mysqli_connect("localhost", "root", "root", "yeticave");
 require_once 'helpers.php';
 require_once 'check_err.php';
+require_once 'db.php';
+
 $required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 $errors = array();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {

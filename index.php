@@ -2,10 +2,8 @@
 session_start();
 $con = mysqli_connect("localhost", "root", "root", "yeticave");
 
-require_once('helpers.php');
+require_once 'helpers.php';
 require_once 'check_err.php';
-//$isAuth = $_SESSION['userId'] ?? 0;
-//$userName = $_SESSION['userName'] ?? '';
 
 $sql = "SELECT name, symbol_code FROM categories";
 $result = mysqli_query($con, $sql);
@@ -29,8 +27,6 @@ $pageContent = include_template('main.php', compact('categories', 'units'));
 $page = include_template(
     'layout.php',
     compact('categories', 'categories', 'units', 'pageContent', 'title'
-    //,
-    //'userName', 'isAuth'
     )
 );
 print($page);
