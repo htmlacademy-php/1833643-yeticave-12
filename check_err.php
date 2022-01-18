@@ -27,6 +27,28 @@ function validateFilled($name)
 }
 
 /**
+ * @param string $name
+ * @return string|null
+ */
+function validateFilledGET(string $name): ?string
+{
+    if (empty($_GET[$name])) {
+        return 'Поле не заполнено ';
+    }
+
+    return NULL;
+}
+
+/**
+ * @param string $name
+ * @return string
+ */
+function filteredGET(string $name): string
+{
+    return e($_GET[$name]) ?? "";
+}
+
+/**
  * @param $str
  * @return string|void
  */
@@ -94,6 +116,15 @@ function getPostVal(string $name): string
 function getFilteredPostVal(string $name): string
 {
     return e(getPostVal($name)) ?? "";
+}
+
+/**
+ * @param array $hoursMinuts
+ * @return string
+ */
+function getTimerValue(array $hoursMinuts): string
+{
+    return implode(':', $hoursMinuts) ?? "";
 }
 
 ?>

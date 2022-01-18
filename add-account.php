@@ -1,7 +1,7 @@
 <?php
-$con = mysqli_connect("localhost", "root", "root", "yeticave");
 require_once 'helpers.php';
 require_once 'check_err.php';
+require_once 'db.php';
 
 $categories = getCategories($con);
 $isAuth = 0;
