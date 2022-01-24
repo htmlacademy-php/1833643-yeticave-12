@@ -194,3 +194,4 @@ function formatAmount(int $amount): string
     return "{$amount} ₽";
 }
 
+?>

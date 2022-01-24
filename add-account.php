@@ -4,8 +4,6 @@ require_once 'check_err.php';
 require_once 'db.php';
 
 $categories = getCategories($con);
-$isAuth = 0;
-$userName = 'IgorGrinev'; // enter your name here
 $title = 'Регистрация нового аккаунта';
 
 $rules = [
@@ -59,28 +57,27 @@ if (isset($_POST['submit'])) {  //If there is such a field in the POST, then the
     //if errors - show add account page
     if ($errors) {
         $pageContent = include_template('sign-up.php', compact('categories', 'errors'));
-        $page = include_template('layout.php', compact('categories', 'pageContent', 'title', 'userName', 'isAuth'));
+        $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
         print($page);
     } else {
         //if not errors - add new user to database
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-        $sql_insert_new_users = "INSERT INTO users (email, name, password, contacts) VALUES ((?), (?), (?), (?))";
+        $sql = "INSERT INTO users (email, name, password, contacts) VALUES ((?), (?), (?), (?))";
 
-        $stmt = mysqli_prepare($con, $sql_insert_new_users);
+        $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt, 'ssss', getPostVal('email'), getPostVal('name'), $hash_password, getPostVal('message'));
-        mysqli_stmt_execute($stmt);
+ //       mysqli_stmt_execute($stmt);
         if (!mysqli_stmt_execute($stmt)) {
             $error = mysqli_error($con);
-            print_r($sql_insert_new_users);
             exit("Ошибка MySQL: " . $error);
         }
 
         //redirect to user personal page
-        header('Location: pages/login.html');
+        header('Location: sign-in.php');
     }
 } else {  //if form not sent, show add account page
     $pageContent = include_template('sign-up.php', compact('categories', 'errors'));
-    $page = include_template('layout.php', compact('categories', 'pageContent', 'title', 'userName', 'isAuth'));
+    $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
     print($page);
 }

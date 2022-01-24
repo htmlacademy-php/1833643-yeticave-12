@@ -1,5 +1,5 @@
 <?php
-
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $con = mysqli_connect("localhost", "root", "root", "yeticave");
 
 /**
@@ -96,4 +96,52 @@ function getUnit(mysqli $con, $id): array
     return $unit;
 }
 
-?>
+/**
+ * @param mysqli $connection
+ * @param string $query
+ * @return array|null
+ */
+function dbReadAll(mysqli $connection, string $query): ?array
+{
+    $result_query = mysqli_query($connection, $query);
+    return mysqli_fetch_all($result_query, MYSQLI_ASSOC);
+}
+
+/**
+ * @param mysqli $connection
+ * @param string $query
+ * @return array|null
+ */
+function dbReadOneLine(mysqli $connection, string $query) : ?array
+{
+    $result_query = mysqli_query($connection, $query);
+    return mysqli_fetch_array($result_query, MYSQLI_ASSOC);
+}
+
+/**
+* Записывает в БД указанному лоту победителя по нему
+*
+* @param mysqli $connection Connect BD
+* @param int $userId id of current user
+*
+* @return array Вышеозначенные лоты
+*/
+function getAllLotsWithMyBets(mysqli $connection, int $userId): array {
+$sql_lots_with_my_bets = "SELECT lots.id AS lot_id,
+       lots.created_at AS date_create_lot,
+       lots.name,
+       lots.image_url,
+       lots.initial_price,
+       lots.completion_date,
+       lots.bet_step,
+       lots.winner_users_id,
+       categories.name AS category_name,
+       bets.users_id,
+       bets.created_at AS date_create_bet,
+       bets.amount AS price_my_bet,
+       users.contacts
+FROM lots JOIN categories ON lots.categories_id = categories.id
+    JOIN bets ON lots.id = bets.lots_id LEFT JOIN users ON lots.winner_users_id = users.id
+WHERE (bets.users_id = ?) ORDER BY bets.created_at DESC";
+return db_read_all_stmt($connection, $sql_lots_with_my_bets, [$userId]);
+}
