@@ -44,12 +44,13 @@ function searchResults($con, $searchQuery, $numberLotsOnPage, $offset)
  */
 function getCategories(mysqli $con): array
 {
-    $sql = "SELECT name, symbol_code as id FROM categories";
-    $categories = [];
-    $res = mysqli_query($con, $sql);
-    while ($res && $row = $res->fetch_assoc()) {
-        $categories[] = $row;
-    }
+    $sql = "SELECT
+       id,
+       name,
+       symbol_code
+FROM categories";
+    $result = mysqli_query($con, $sql);
+    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $categories;
 }
 
@@ -112,22 +113,23 @@ function dbReadAll(mysqli $connection, string $query): ?array
  * @param string $query
  * @return array|null
  */
-function dbReadOneLine(mysqli $connection, string $query) : ?array
+function dbReadOneLine(mysqli $connection, string $query): ?array
 {
     $result_query = mysqli_query($connection, $query);
     return mysqli_fetch_array($result_query, MYSQLI_ASSOC);
 }
 
 /**
-* Записывает в БД указанному лоту победителя по нему
-*
-* @param mysqli $connection Connect BD
-* @param int $userId id of current user
-*
-* @return array Вышеозначенные лоты
-*/
-function getAllLotsWithMyBets(mysqli $connection, int $userId): array {
-$sql_lots_with_my_bets = "SELECT lots.id AS lot_id,
+ * Записывает в БД указанному лоту победителя по нему
+ *
+ * @param mysqli $connection Connect BD
+ * @param int $userId id of current user
+ *
+ * @return array Вышеозначенные лоты
+ */
+function getAllLotsWithMyBets(mysqli $connection, int $userId): array
+{
+    $sql_lots_with_my_bets = "SELECT lots.id AS lot_id,
        lots.created_at AS date_create_lot,
        lots.name,
        lots.image_url,
@@ -143,5 +145,53 @@ $sql_lots_with_my_bets = "SELECT lots.id AS lot_id,
 FROM lots JOIN categories ON lots.categories_id = categories.id
     JOIN bets ON lots.id = bets.lots_id LEFT JOIN users ON lots.winner_users_id = users.id
 WHERE (bets.users_id = ?) ORDER BY bets.created_at DESC";
-return db_read_all_stmt($connection, $sql_lots_with_my_bets, [$userId]);
+    return db_read_all_stmt($connection, $sql_lots_with_my_bets, [$userId]);
+}
+
+/**
+ * Get current lot data
+ * @param $connnection
+ * @param $lotId
+ * @return array|false|string[]|null
+ */
+function openLot($connnection, $lotId)
+{
+    $sql = "SELECT
+       lots.created_at,
+       lots.name,
+       lots.description,
+       lots.image_url,
+       lots.initial_price,
+       lots.completion_date,
+       lots.bet_step,
+       categories.name AS name_category
+FROM lots JOIN categories ON lots.categories_id = categories.id
+WHERE lots.id =?";
+    $stmt = mysqli_prepare($connnection, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $lotId);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_assoc($result);
+}
+
+/**
+ * get all bets of current lot
+ * @param $connnection
+ * @param $lotId
+ * @return array
+ */
+function openBets($connection, $lotId)
+{
+    $sql = "SELECT
+       bets.created_at,
+       bets.amount,
+       users.name
+FROM bets JOIN users ON bets.users_id = users.id
+WHERE bets.lots_id = ?
+ORDER BY bets.created_at DESC ";
+    $stmt = mysqli_prepare($connection, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $lotId);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }

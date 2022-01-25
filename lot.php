@@ -10,19 +10,18 @@ if (!isset($_GET['id'])) {
     die();
 }
 
-$id = initOpenLot($_GET, $_SESSION);
-checkId($con, $id);
+$lotId = initOpenLot($_GET, $_SESSION);
+checkId($con, $lotId);
 
 $categories = getCategories($con);
 
-$sql_read_lot = "SELECT lots.created_at, lots.name, lots.description, lots.image_url, lots.initial_price, lots.completion_date, lots.bet_step, categories.name AS name_category FROM lots JOIN categories ON lots.categories_id = categories.id WHERE lots.id ='" . $id ."'";
-$openLot = dbReadOneLine($con, $sql_read_lot);
+$openLot = openLot($con, $lotId);
 if ($openLot === NULL) {
     http_response_code(404);
-    exit("Страница с id =" . $id . " не найдена.");
+    exit("Страница с id =" . $lotId . " не найдена.");
 }
-$sql_read_bet = "SELECT bets.created_at, bets.amount, users.name FROM bets JOIN users ON bets.users_id = users.id WHERE bets.lots_id = '$id' ORDER BY bets.created_at DESC ";
-$openBets = dbReadAll($con, $sql_read_bet);
+
+$openBets = openBets($con, $lotId);
 
 $currentPrice = checkPriceLot($openBets, (int)$openLot['initial_price']);
 
@@ -48,12 +47,14 @@ if (isset($_POST['submit_bet'])) {  //If there is such a field in the POST, then
     }
 }
 
-if (!isset($errors)) {$errors = [];}
-$userId = (int)$_SESSION['userId'];
-$item = getUnit($con, $id);
+if (!isset($errors)) {
+    $errors = [];
+}
+//$userId = (int)$_SESSION['userId'];
+$item = getUnit($con, $lotId);
 $title = 'Просмотр лота';
 
-$pageContent = include_template('TempLot.php', compact('categories', 'item','openLot', 'openBets','errors','currentPrice'));
+$pageContent = include_template('TempLot.php', compact('categories', 'item', 'openLot', 'openBets', 'errors', 'currentPrice'));
 $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
 
 print($page);

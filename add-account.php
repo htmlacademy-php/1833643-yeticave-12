@@ -63,11 +63,10 @@ if (isset($_POST['submit'])) {  //If there is such a field in the POST, then the
         //if not errors - add new user to database
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-        $sql = "INSERT INTO users (email, name, password, contacts) VALUES ((?), (?), (?), (?))";
+        $sql = "INSERT INTO users (email, name, password, contacts) VALUES (?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt, 'ssss', getPostVal('email'), getPostVal('name'), $hash_password, getPostVal('message'));
- //       mysqli_stmt_execute($stmt);
         if (!mysqli_stmt_execute($stmt)) {
             $error = mysqli_error($con);
             exit("Ошибка MySQL: " . $error);
