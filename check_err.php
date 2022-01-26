@@ -119,12 +119,49 @@ function getFilteredPostVal(string $name): string
 }
 
 /**
- * @param array $hoursMinuts
- * @return string
+ * Валидирует поле 'cost' в форме добавления ставки
+ *
+ * @param array $open_lot Массив с открытым лотом
+ * @param int $current_price Текущая цена лота
+ * @param array $session Данные из массива $_SESSION
+ * @param array $post Данные из массива $_POST
+ *
+ * @return ?string Текст ошибки или NULL
  */
-function getTimerValue(array $hoursMinuts): string
+function validate_field_cost(array $openLot, int $currentPrice, array $session, array $post): ?string
 {
-    return implode(':', $hoursMinuts) ?? "";
+    $error = validateFilled('cost');
+    if ($error) {
+        return $error;
+    }
+    if (!isset($session['userId'])){
+        return 'Необходимо зарегистрироваться';
+    }
+    if ($post['cost'] <= 0 || !is_numeric($post['cost'])) {
+        return 'Начальная цена должна быть целым числом больше нуля';
+    }
+
+    $min_bet = $currentPrice + (int)$openLot['bet_step'];
+    if ((int)$post['cost'] < $min_bet) {
+        return 'Мин.ставка д.б. не менее ' . $min_bet .  ' ₽';
+    }
+
+    return NULL;
 }
 
-?>
+/**
+ * Валидирует данные формы добавления ставки, получая данные из $POST
+ *
+ * @param array $openLot Ассоциативный массив с данными открытого лота
+ * @param int $current_price Текущая цена лота
+ * @param array $session Данные из массива $_SESSION
+ * @param array $post Данные из массива $_POST
+ *
+ * @return array Возвращает массив с ошибками, или пустой массив, если ошибок нет
+ */
+function validateBetsForm(array $openLot, int $currentPrice, array $session, array $post) : array
+{
+    $errors_validate['cost'] = validate_field_cost($openLot, $currentPrice, $session, $post);
+
+    return array_filter($errors_validate);  //убираем пустые значения в массиве и возвращаем его
+}

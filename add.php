@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'helpers.php';
 require_once 'check_err.php';
 require_once 'db.php';
@@ -7,9 +8,6 @@ $required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', '
 $errors = array();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
     error_reporting(E_ALL);
-
-    $isAuth = 0;
-    $userName = 'IgorGrinev'; // укажите здесь ваше имя
     $title = 'Добавление лота';
 
     ini_set('display_errors', 'on');
@@ -33,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
     if (validateNaturalNum($lot_step)) {
         $errors['lot-step'] = validateNaturalNum($lot_step);
     }
+    $date=date("Y-m-d H:i:s");
     $lot_date = readPOST('lot-date');
     if (validateDate($lot_date)) {
         $errors['lot-date'] = validateDate($date);
@@ -67,11 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
         exit ();
     }
 }
-
 $categories = getCategories($con);
 
 $pageContent = include_template('add-lot.php', compact('categories', 'errors'));
-$page = include_template('layout.php', compact('categories', 'pageContent', 'isAuth', 'userName'));
+$page = include_template('layout.php', compact('categories', 'pageContent'));
 
 print($page);
 

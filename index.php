@@ -1,13 +1,14 @@
 <?php
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+
 session_start();
-$con = mysqli_connect("localhost", "root", "root", "yeticave");
 
 require_once 'helpers.php';
 require_once 'check_err.php';
+require_once 'db.php';
 
-$sql = "SELECT name, symbol_code FROM categories";
-$result = mysqli_query($con, $sql);
-$categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$categories = getCategories($con);
 
 $sql = "SELECT lots.id,
             lots.name            as name,
