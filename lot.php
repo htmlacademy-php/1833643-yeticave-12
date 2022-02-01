@@ -54,7 +54,7 @@ if (!isset($errors)) {
 $item = getUnit($con, $lotId);
 $title = 'Просмотр лота';
 
-$pageContent = include_template('TempLot.php', compact('categories', 'item', 'openLot', 'openBets', 'errors', 'currentPrice'));
+$pageContent = include_template('t-lot.php', compact('categories', 'item', 'openLot', 'openBets', 'errors', 'currentPrice'));
 $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
 
 print($page);

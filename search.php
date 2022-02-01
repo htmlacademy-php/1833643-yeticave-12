@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'helpers.php';
+require_once 'functions.php';
 require_once 'check_err.php';
 require_once 'db.php';
 $title = 'Вход';
@@ -29,7 +30,7 @@ if (isset($_GET['find'])) {  //If there is such a field in GET, then the form ha
 
     //If validation errors, show the search results page
     if ($errors) {
-        $pageContent = include_template('temp-search.php', compact('categories', 'errors'));
+        $pageContent = include_template('t-search.php', compact('categories', 'errors'));
         $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
         print($page);
     } else {
@@ -46,13 +47,13 @@ if (isset($_GET['find'])) {  //If there is such a field in GET, then the form ha
         //Getting limited search list of lots
         $searchResults = searchResults($con, $searchQuery, $numberLotsOnPage, $offset);
 
-        $pageContent = include_template('temp-search.php', compact('categories', 'errors', 'searchResults', 'numberLotsOnPage', 'numberOfSearchedLots', 'numberOfPage', 'activePage'));
+        $pageContent = include_template('t-search.php', compact('categories', 'errors', 'searchResults', 'numberLotsOnPage', 'numberOfSearchedLots', 'numberOfPage', 'activePage'));
         $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
         print($page);
 
     }
 } else {  //If the form is not submitted, show the results page without results
-    $pageContent = include_template('temp-search.php', compact('categories', 'errors', 'searchResults', 'numberLotsOnPage', 'numberOfSearchedLots', 'numberOfPage', 'activePage'));
+    $pageContent = include_template('t-search.php', compact('categories', 'errors', 'searchResults', 'numberLotsOnPage', 'numberOfSearchedLots', 'numberOfPage', 'activePage'));
     $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
     print($page);
 }
