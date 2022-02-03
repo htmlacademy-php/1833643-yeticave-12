@@ -175,19 +175,19 @@ function get_dt_range_back(string $date_create): string
  * Return user name by id.
  * @param mysqli $con connect to BD.
  * @param int $id user id .
- * @return string user name.
+ * @return string|null user name.
  */
-function getUserNameById (mysqli $con, ?int $id): string
+function getUserNameById(mysqli $con, int $id)
 {
     if (is_null($id)){
-        return '';
+        return null;
     }
 
     $sql = "SELECT name FROM users WHERE id = ?";
     $stmt = db_get_prepare_stmt($con, $sql, [$id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    $name = '';
+    $name = null;
 
     if ($result && $row = $result->fetch_assoc()){
         $name = $row['name'];
@@ -199,22 +199,22 @@ function getUserNameById (mysqli $con, ?int $id): string
  * Return user email by id.
  * @param mysqli $con connect to BD.
  * @param int $id user id .
- * @return string user name.
+ * @return string|null user mail.
  */
-function getUserEmailById (mysqli $con, ?int $id): string
+function getUserEmailById(mysqli $con,int $id)
 {
     if (is_null($id)){
-        return '';
+        return null;
     }
 
     $sql = "SELECT email FROM users WHERE id = ?";
     $stmt = db_get_prepare_stmt($con, $sql, [$id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    $name = '';
+    $mail = null;
 
     if ($result && $row = $result->fetch_assoc()){
-        $name = $row['email'];
+        $mail = $row['email'];
     }
-    return $name;
+    return $mail;
 }

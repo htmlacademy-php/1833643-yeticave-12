@@ -2,9 +2,10 @@
 require_once 'vendor/autoload.php';
 require_once 'functions.php';
 require_once 'db.php';
+require_once 'config.php';
 
 $winners = calcWinners($con);
-if (isset($winners)) {
+if (!empty($winners)) {
     foreach ($winners as $winner) {
         setWinners($con, $winner);
     }
@@ -70,15 +71,15 @@ function setWinners(mysqli $con, array $winners)
 
 function sendCongratulations(mysqli $con, array $winners)
 {
-    $transport = (new Swift_SmtpTransport('smtp.yandex.ru', 465, 'ssl'))
-        ->setUsername('derezasu@yandex.ru')
-        ->setPassword('xwiktdptlfqwuskn');
+    $transport = (new Swift_SmtpTransport(SET_HOST, SET_PORT, SET_ENCRYPTION))
+        ->setUsername(SET_FROM)
+        ->setPassword(SET_PASSWORD);
 
     $text = include_template('email.php', ['winner_arr' => $winners]);
 
     $message = (new Swift_Message())
         ->setSubject('Поздравления от Yeticave')
-        ->setFrom(['derezasu@yandex.ru'])
+        ->setFrom([SET_FROM])
         ->setTo($winners['winner_mail'])
         ->addPart($text, 'text/html');
 
@@ -87,6 +88,6 @@ function sendCongratulations(mysqli $con, array $winners)
     try {
         $result = $mailer->send($message);
     } catch (Exception $e) {
-        $e->getMessage();
+        echo $e->getMessage();
     }
 }

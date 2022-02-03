@@ -14,7 +14,13 @@ function numberOfSearchedLots_($searchQuery, $con): int
     mysqli_stmt_bind_param($stmt, 's', $searchQuery);
     mysqli_stmt_execute($stmt);
     $searchedLots = mysqli_stmt_get_result($stmt);
-    return mysqli_num_rows($searchedLots);
+
+    if (mysqli_errno($con) && $searchedLots) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        die();
+    } else {
+        return mysqli_num_rows($searchedLots);
+    }
 }
 
 /**
@@ -51,7 +57,13 @@ function getCategories(mysqli $con): array
 FROM categories";
     $result = mysqli_query($con, $sql);
     $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    return $categories;
+
+    if (mysqli_errno($con) && $result) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        die();
+    } else {
+        return $categories;
+    }
 }
 
 /**
@@ -94,29 +106,8 @@ function getUnit(mysqli $con, $id): array
     if ($res && $row = $res->fetch_assoc()) {
         $unit = $row;
     }
+
     return $unit;
-}
-
-/**
- * @param mysqli $connection
- * @param string $query
- * @return array|null
- */
-function dbReadAll(mysqli $connection, string $query): ?array
-{
-    $result_query = mysqli_query($connection, $query);
-    return mysqli_fetch_all($result_query, MYSQLI_ASSOC);
-}
-
-/**
- * @param mysqli $connection
- * @param string $query
- * @return array|null
- */
-function dbReadOneLine(mysqli $connection, string $query): ?array
-{
-    $result_query = mysqli_query($connection, $query);
-    return mysqli_fetch_array($result_query, MYSQLI_ASSOC);
 }
 
 /**
@@ -145,7 +136,13 @@ function getAllLotsWithMyBets(mysqli $connection, int $userId): array
 FROM lots JOIN categories ON lots.categories_id = categories.id
     JOIN bets ON lots.id = bets.lots_id LEFT JOIN users ON lots.winner_users_id = users.id
 WHERE (bets.users_id = ?) ORDER BY bets.created_at DESC";
-    return db_read_all_stmt($connection, $sql_lots_with_my_bets, [$userId]);
+
+    if (mysqli_errno($connection) && db_read_all_stmt($connection, $sql_lots_with_my_bets, [$userId])) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        die();
+    } else {
+        return db_read_all_stmt($connection, $sql_lots_with_my_bets, [$userId]);
+    }
 }
 
 /**
@@ -154,7 +151,7 @@ WHERE (bets.users_id = ?) ORDER BY bets.created_at DESC";
  * @param $lotId
  * @return array|false|string[]|null
  */
-function openLot($connnection, $lotId)
+function openLot($connection, $lotId)
 {
     $sql = "SELECT
        lots.created_at,
@@ -167,11 +164,17 @@ function openLot($connnection, $lotId)
        categories.name AS name_category
 FROM lots JOIN categories ON lots.categories_id = categories.id
 WHERE lots.id =?";
-    $stmt = mysqli_prepare($connnection, $sql);
+    $stmt = mysqli_prepare($connection, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $lotId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    return mysqli_fetch_assoc($result);
+
+    if (mysqli_errno($connection) && $result) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        die();
+    } else {
+        return mysqli_fetch_assoc($result);
+    }
 }
 
 /**
@@ -193,5 +196,13 @@ ORDER BY bets.created_at DESC ";
     mysqli_stmt_bind_param($stmt, 'i', $lotId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    if (mysqli_errno($connection) && $result) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
+        die();
+    } else {
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+
 }
