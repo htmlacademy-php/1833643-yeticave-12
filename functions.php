@@ -171,4 +171,50 @@ function get_dt_range_back(string $date_create): string
     return date('d.m.y в H:i', strtotime($date_create));
 }
 
-?>
+/**
+ * Return user name by id.
+ * @param mysqli $con connect to BD.
+ * @param int $id user id .
+ * @return string|null user name.
+ */
+function getUserNameById(mysqli $con, int $id)
+{
+    if (is_null($id)){
+        return null;
+    }
+
+    $sql = "SELECT name FROM users WHERE id = ?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$id]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $name = null;
+
+    if ($result && $row = $result->fetch_assoc()){
+        $name = $row['name'];
+    }
+    return $name;
+}
+
+/**
+ * Return user email by id.
+ * @param mysqli $con connect to BD.
+ * @param int $id user id .
+ * @return string|null user mail.
+ */
+function getUserEmailById(mysqli $con,int $id)
+{
+    if (is_null($id)){
+        return null;
+    }
+
+    $sql = "SELECT email FROM users WHERE id = ?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$id]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $mail = null;
+
+    if ($result && $row = $result->fetch_assoc()){
+        $mail = $row['email'];
+    }
+    return $mail;
+}

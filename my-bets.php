@@ -10,7 +10,7 @@ $categories = getCategories($con);
 $lotsWithMyBets = getAllLotsWithMyBets($con, $userId);
 $title = 'Мои ставки';
 
-$pageContent = include_template('temp-my-bets.php', compact('categories' , 'lotsWithMyBets'));
+$pageContent = include_template('t-my-bets.php', compact('categories' , 'lotsWithMyBets'));
 $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
 print($page);
 
