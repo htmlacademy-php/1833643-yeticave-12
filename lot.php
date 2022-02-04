@@ -31,14 +31,14 @@ if (isset($_POST['submit_bet'])) {  //If there is such a field in the POST, then
     //If validation errors, return to the page for adding a new bet with errors displayed.
     if (!$errors) {
         //If no errors, add a new bet to the database
-        $price_bet = $currentPrice + (int)$openLot['bet_step'];
-        if ($_POST['cost'] > $price_bet) {
-            $price_bet = (int)getPostVal('cost');
+        $priceBet = $currentPrice + (int)$openLot['bet_step'];
+        if ($_POST['cost'] > $priceBet) {
+            $priceBet = (int)getPostVal('cost');
         }
 
-        $sql_insert_bet = 'INSERT INTO bets ( amount, users_id, lots_id) VALUES ( ?, ?, ?)';
-        $stmt = mysqli_prepare($con, $sql_insert_bet);
-        mysqli_stmt_bind_param($stmt, 'iii', $price_bet, $_SESSION['userId'], $id);
+        $sql = 'INSERT INTO bets ( amount, users_id, lots_id) VALUES ( ?, ?, ?)';
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, 'iii', $priceBet, $_SESSION['userId'], $lotId);
         if (!mysqli_stmt_execute($stmt)) {
             $error = mysqli_error($con);
             exit("Ошибка MySQL: " . $error);

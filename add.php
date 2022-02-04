@@ -22,42 +22,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["submit"])) {
     }
     $category = (int)readPOST('category');
     $message = readPOST('message');
-    $lot_rate = (int)readPOST('lot-rate');
-    if (validateNaturalNum($lot_rate)) {
-        $errors['lot-rate'] = validateNaturalNum($lot_rate);
+    $lotRate = (int)readPOST('lot-rate');
+    if (validateNaturalNum($lotRate)) {
+        $errors['lot-rate'] = validateNaturalNum($lotRate);
     }
 
-    $lot_step = (int)readPOST('lot-step');
-    if (validateNaturalNum($lot_step)) {
-        $errors['lot-step'] = validateNaturalNum($lot_step);
+    $lotStep = (int)readPOST('lot-step');
+    if (validateNaturalNum($lotStep)) {
+        $errors['lot-step'] = validateNaturalNum($lotStep);
     }
-    $date=date("Y-m-d H:i:s");
-    $lot_date = readPOST('lot-date');
-    if (validateDate($lot_date)) {
+    $date = date("Y-m-d H:i:s");
+    $lotDate = readPOST('lot-date');
+    if (validateDate($lotDate)) {
         $errors['lot-date'] = validateDate($date);
     }
 
-    if (isset($_FILES['file']) && !($_FILES['file']['error'] === UPLOAD_ERR_OK)) {
+    if (isset($_FILES['file']) && !($_FILES['file']['error'])) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $file_name = $_FILES['file']['tmp_name'];
-        $file_size = $_FILES['file']['size'];
-        $file_type = finfo_file($finfo, $file_name);
-        if ($file_type !== 'image/png' || $file_type !== 'image/jpeg') {
-            $errors['file'] = 'Загрузите картинку в нужном формате';
+        $fileName = $_FILES['file']['tmp_name'];
+        $fileSize = $_FILES['file']['size'];
+        $fileType = finfo_file($finfo, $fileName);
+        if ($fileType == 'image/png' || $fileType == 'image/jpeg') {
+            $filePath = 'uploads/' . $_FILES['file']['name'];
+            move_uploaded_file($_FILES['file']['tmp_name'], $filePath);
         } else {
-            $file_path = 'uploads/' . $_FILES['file']['name'];
-            move_uploaded_file($_FILES['file']['tmp_name'], $file_path);
+            $errors['file'] = 'Загрузите картинку в нужном формате';
         }
     }
 
     if (count($errors) == 0) {
         $con = mysqli_connect("localhost", "root", "root", "yeticave");
-        $file_path = 'uploads/' . $_FILES['file']['name'];
+        $filePath = 'uploads/' . $_FILES['file']['name'];
         $sql = "INSERT INTO lots (name, description, image_url, initial_price, completion_date, bet_step, categories_id) VALUES ((?), (?), (?), (?), (?), (?), (?))";
         $stmt = db_get_prepare_stmt(
             $con,
             $sql,
-            $data = [$name, $message, $file_path, $lot_rate, $lot_date, $lot_step, $category]
+            $data = [$name, $message, $filePath, $lotRate, $lotDate, $lotStep, $category]
         );
         mysqli_stmt_execute($stmt);
         //Redirect if not errors
