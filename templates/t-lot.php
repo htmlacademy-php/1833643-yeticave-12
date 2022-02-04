@@ -3,7 +3,7 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="all-lots.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']) ?></a>
+                    <a href="index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']) ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -33,23 +33,25 @@
                         </div>
                         <div class="lot-item__min-cost">
                             <?php $newBet = formatAmount($currentPrice + (int)$openLot['bet_step']) ?>
-                            Мин. ставка <span><?=e($newBet) ?></span>
+                            Мин. ставка <span><?= e($newBet) ?></span>
                         </div>
                     </div>
                     <?php if (isset($_SESSION['userId'])) : ?>
-                        <form class="lot-item__form" action="lot.php?id=<?=$_SESSION['lotId'] ?>" method="post" autocomplete="off">
-                            <p class="lot-item__form-item form__item <?php if(count($errors) > 0): ?> form__item--invalid
+                        <form class="lot-item__form" action="lot.php?id=<?= $_SESSION['lotId'] ?>" method="post"
+                              autocomplete="off">
+                            <p class="lot-item__form-item form__item <?php if (count($errors) > 0): ?> form__item--invalid
                             <?php endif; ?>">
                                 <label for="cost">Ваша ставка</label>
-                                <input id="cost" type="text" name="cost" value="<?=getFilteredPostVal('cost'); ?>" placeholder="<?=e($newBet) ?>">
-                                <span class="form__error"><?php echo ($errors['cost'] ?? "") ?></span>
+                                <input id="cost" type="text" name="cost" value="<?= getFilteredPostVal('cost'); ?>"
+                                       placeholder="<?= e($newBet) ?>">
+                                <span class="form__error"><?php echo($errors['cost'] ?? "") ?></span>
                             </p>
                             <button type="submit" name="submit_bet" class="button">Сделать ставку</button>
                         </form>
                     <?php endif; ?>
                 </div>
                 <div class="history">
-                    <h3>История ставок (<span><?=count($openBets) ?></span>)</h3>
+                    <h3>История ставок (<span><?= count($openBets) ?></span>)</h3>
                     <table class="history__list">
                         <?php if (count($openBets)) {
                             foreach ($openBets as $bet): ?>
@@ -58,7 +60,8 @@
                                     <td class="history__price"><?= e(formatAmount($bet['amount'])) ?></td>
                                     <td class="history__time"><?= timeAgo($bet['created_at']) ?></td>
                                 </tr>
-                            <?php endforeach;} ?>
+                            <?php endforeach;
+                        } ?>
                     </table>
                 </div>
             </div>

@@ -17,11 +17,11 @@
                 <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
             <form class="main-header__search" method="get" action="search.php" autocomplete="off">
-                <input type="search" name="search" placeholder="Поиск лота"  value="">
+                <input type="search" name="search" placeholder="Поиск лота" value="">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
             <?php if (isset($_SESSION['userId'])) : ?>
-            <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
+                <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
             <?php endif; ?>
             <nav class="user-menu">
 
@@ -56,7 +56,7 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="all-lots.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']); ?></a>
+                    <a href="index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']); ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -105,7 +105,7 @@
             </a>
         </div>
         <?php if (isset($_SESSION['userId'])) : ?>
-        <a class="main-footer__add-lot button" href="add.php">Добавить лот</a>
+            <a class="main-footer__add-lot button" href="add.php">Добавить лот</a>
         <?php endif; ?>
         <div class="main-footer__developed-by">
             <span class="visually-hidden">Разработано:</span>

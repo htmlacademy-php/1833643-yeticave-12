@@ -6,14 +6,15 @@
         <!--заполните этот список из массива категорий-->
         <?php foreach ($categories as $category): ?>
             <li class="promo__item promo__item--<?= e($category['symbol_code']); ?>">
-                <a class="promo__link" href="all-lots.php?id=<?= $category['id'] ?>"><?= e($category['name']); ?></a>
+                <a class="promo__link"
+                   href="index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
 </section>
 <section class="lots">
     <div class="lots__header">
-        <h2>Открытые лоты</h2>
+        <h2><?= e($categoryName); ?></h2>
     </div>
     <ul class="lots__list">
         <?php foreach ($units as $unit): ?>

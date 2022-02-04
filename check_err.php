@@ -134,7 +134,7 @@ function validate_field_cost(array $openLot, int $currentPrice, array $session, 
     if ($error) {
         return $error;
     }
-    if (!isset($session['userId'])){
+    if (!isset($session['userId'])) {
         return 'Необходимо зарегистрироваться';
     }
     if ($post['cost'] <= 0 || !is_numeric($post['cost'])) {
@@ -143,7 +143,7 @@ function validate_field_cost(array $openLot, int $currentPrice, array $session, 
 
     $min_bet = $currentPrice + (int)$openLot['bet_step'];
     if ((int)$post['cost'] < $min_bet) {
-        return 'Мин.ставка д.б. не менее ' . $min_bet .  ' ₽';
+        return 'Мин.ставка д.б. не менее ' . $min_bet . ' ₽';
     }
 
     return NULL;
@@ -159,7 +159,7 @@ function validate_field_cost(array $openLot, int $currentPrice, array $session, 
  *
  * @return array Возвращает массив с ошибками, или пустой массив, если ошибок нет
  */
-function validateBetsForm(array $openLot, int $currentPrice, array $session, array $post) : array
+function validateBetsForm(array $openLot, int $currentPrice, array $session, array $post): array
 {
     $errors_validate['cost'] = validate_field_cost($openLot, $currentPrice, $session, $post);
 

@@ -13,10 +13,10 @@ function timeAgo(string $create_at): string
     $diff = strtotime("now") - strtotime($create_at);
     $back_time = [floor($diff / 3600), floor(($diff % 3600) / 60)];
     if ($diff < 3600) {
-        return $back_time[1] . get_noun_plural_form($back_time[1],' минута',' минуты',' минут') .' назад';
+        return $back_time[1] . get_noun_plural_form($back_time[1], ' минута', ' минуты', ' минут') . ' назад';
     }
     if ($diff < 86400) {
-        return $back_time[0] . get_noun_plural_form($back_time[0],' час',' часа',' часов') .' назад';
+        return $back_time[0] . get_noun_plural_form($back_time[0], ' час', ' часа', ' часов') . ' назад';
     }
     return date('d.m.Y в H:i', strtotime($create_at));
 }
@@ -30,20 +30,18 @@ function timeAgo(string $create_at): string
  *
  * @return int Возвращает id лота
  */
-function initOpenLot(array $get, array $session) : int
+function initOpenLot(array $get, array $session): int
 {
     if (isset($get['id'])) {
-        $id = (int) $get['id'];
+        $id = (int)$get['id'];
 
         if (isset($session['userId'])) {
             $_SESSION['lotId'] = $id;
         }
-    }
-    else {
+    } else {
         if (isset($session['lotId'])) {
             $id = (int)$session['lotId'];
-        }
-        else {
+        } else {
             http_response_code(404);
             exit("Ошибка подключения: не указан id");
         }
@@ -60,7 +58,7 @@ function initOpenLot(array $get, array $session) : int
  *
  * @return int Returns the current lot price
  */
-function checkPriceLot(array $bet_open_lot, int $start_price_lot) : int
+function checkPriceLot(array $bet_open_lot, int $start_price_lot): int
 {
     if (isset($bet_open_lot[0]['amount'])) {
         $current_price = (int)$bet_open_lot[0]['amount'];
@@ -80,7 +78,7 @@ function checkPriceLot(array $bet_open_lot, int $start_price_lot) : int
  *
  * @return void
  */
-function check_success_insert_or_read_stmt_execute(mysqli $connection, mysqli_stmt $stmt) : void
+function check_success_insert_or_read_stmt_execute(mysqli $connection, mysqli_stmt $stmt): void
 {
     if (!mysqli_stmt_execute($stmt)) {
         $error = mysqli_error($connection);
@@ -98,7 +96,7 @@ function check_success_insert_or_read_stmt_execute(mysqli $connection, mysqli_st
  *
  * @return array Ассоциативный массив результата запроса
  */
-function db_read_all_stmt(mysqli $connection, string $query, array $data) : ?array
+function db_read_all_stmt(mysqli $connection, string $query, array $data): ?array
 {
     $stmt = db_get_prepare_stmt($connection, $query, $data);
     check_success_insert_or_read_stmt_execute($connection, $stmt);
@@ -117,7 +115,7 @@ function db_read_all_stmt(mysqli $connection, string $query, array $data) : ?arr
 function get_dt_range_with_seconds(string $date_end): array
 {
     $diff = strtotime($date_end) - strtotime("now");
-    $end_time = [floor($diff/3600), floor(($diff % 3600)/60), floor(($diff % 3600)%60)];
+    $end_time = [floor($diff / 3600), floor(($diff % 3600) / 60), floor(($diff % 3600) % 60)];
 
     if ($end_time[0] < 0 || $end_time[1] < 0 || $end_time[2] < 0) {
         $end_time[0] = '00';
@@ -126,13 +124,13 @@ function get_dt_range_with_seconds(string $date_end): array
         return $end_time;
     }
 
-    if ($end_time[0] <10) {
+    if ($end_time[0] < 10) {
         $end_time[0] = '0' . $end_time[0];
     }
-    if ($end_time[1] <10) {
+    if ($end_time[1] < 10) {
         $end_time[1] = '0' . $end_time[1];
     }
-    if ($end_time[2] <10) {
+    if ($end_time[2] < 10) {
         $end_time[2] = '0' . $end_time[2];
     }
 
@@ -159,7 +157,7 @@ function getTimerValue(array $hours_and_minuts): string
 function get_dt_range_back(string $date_create): string
 {
     $diff = strtotime("now") - strtotime($date_create);
-    $back_time = [floor($diff/3600), floor(($diff % 3600)/60)];
+    $back_time = [floor($diff / 3600), floor(($diff % 3600) / 60)];
 
     if ($diff < 3600) {
         return $back_time[1] . get_noun_plural_form($back_time[1], ' минута', ' минуты', ' минут') . ' назад';
@@ -172,49 +170,21 @@ function get_dt_range_back(string $date_create): string
 }
 
 /**
- * Return user name by id.
+ * Return category name by id.
  * @param mysqli $con connect to BD.
- * @param int $id user id .
- * @return string|null user name.
+ * @param string $code category code .
+ * @return string category name.
  */
-function getUserNameById(mysqli $con, int $id)
+function getCategoryNameByCode(mysqli $con, string $code): string
 {
-    if (is_null($id)){
-        return null;
-    }
-
-    $sql = "SELECT name FROM users WHERE id = ?";
-    $stmt = db_get_prepare_stmt($con, $sql, [$id]);
+    $sql = "SELECT name FROM categories WHERE symbol_code = ?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$code]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $name = null;
 
-    if ($result && $row = $result->fetch_assoc()){
+    if ($result && $row = $result->fetch_assoc()) {
         $name = $row['name'];
     }
     return $name;
-}
-
-/**
- * Return user email by id.
- * @param mysqli $con connect to BD.
- * @param int $id user id .
- * @return string|null user mail.
- */
-function getUserEmailById(mysqli $con,int $id)
-{
-    if (is_null($id)){
-        return null;
-    }
-
-    $sql = "SELECT email FROM users WHERE id = ?";
-    $stmt = db_get_prepare_stmt($con, $sql, [$id]);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $mail = null;
-
-    if ($result && $row = $result->fetch_assoc()){
-        $mail = $row['email'];
-    }
-    return $mail;
 }
