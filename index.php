@@ -4,11 +4,13 @@ error_reporting(E_ALL);
 
 session_start();
 
+require_once 'init.php';
+require_once 'functions.php';
 require_once 'helpers.php';
 require_once 'check_err.php';
 require_once 'db.php';
-require_once('getwinner.php');
-
+require_once 'getwinner.php';
+global $con;
 $categories = getCategories($con);
 $categoryName = '';
 $title = 'Главная';
@@ -61,4 +63,3 @@ $page = include_template(
     )
 );
 print($page);
-?>

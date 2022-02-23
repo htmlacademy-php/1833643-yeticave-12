@@ -1,5 +1,7 @@
 {
-    "require": {
-        "swiftmailer/swiftmailer": "^6.3"
-    }
+  "require": {
+    "swiftmailer/swiftmailer": "^6.3",
+    "ext-mysqli": "*",
+    "ext-fileinfo": "*"
+  }
 }

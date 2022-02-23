@@ -1,5 +1,4 @@
 <?php
-require_once 'helpers.php';
 
 /**
  * @param $name
@@ -49,25 +48,28 @@ function filteredGET(string $name): string
 }
 
 /**
- * @param $str
- * @return string|void
+ * Валидирует введенную дату
+ *
+ * @return string|null - возвращает текст ошибки или null если все правильно
  */
-function validateDate($date)
+
+function validateDate()
 {
-    if (null !== $date) {
-        if (!is_date_valid($date)) {
-            return "Неверный формат даты";
-        } else {
-            $time_now = strtotime("now");
-            $experation_stamp = strtotime($date);
-            $diff_time = $experation_stamp - $time_now;
-            $day = 86400;
-            if ($diff_time < $day) {
-                return "Указанная дата должна быть больше текущей даты, хотя бы на один день";
-            }
-        }
+    $post_date = $_POST['lot-date'];
+    $timestamp_post_date = strtotime($post_date);
+    $set_date = $timestamp_post_date;
+    $current_date = date('Y-m-d');
+    $current_data_timestamp = strtotime($current_date);
+    if (empty($_POST['lot-date'])) {
+        return "Введите дату";
     }
+    if ($set_date <= $current_data_timestamp) {
+        return "Дата не может быть из прошлого или сегодняшней";
+    }
+
+    return null;
 }
+
 
 /**
  * @param $num
@@ -89,7 +91,6 @@ function validateNaturalNum($num)
 function readPOST($key)
 {
     if (isset($_POST[$key]) && $_POST[$key]) {
-        trim($_POST[$key]);
         if (empty($_POST[$key])) {
             return null;
         } else {
@@ -121,8 +122,8 @@ function getFilteredPostVal(string $name): string
 /**
  * Валидирует поле 'cost' в форме добавления ставки
  *
- * @param array $open_lot Массив с открытым лотом
- * @param int $current_price Текущая цена лота
+ * @param array $openLot Массив с открытым лотом
+ * @param int $currentPrice Текущая цена лота
  * @param array $session Данные из массива $_SESSION
  * @param array $post Данные из массива $_POST
  *
@@ -153,7 +154,7 @@ function validate_field_cost(array $openLot, int $currentPrice, array $session, 
  * Валидирует данные формы добавления ставки, получая данные из $POST
  *
  * @param array $openLot Ассоциативный массив с данными открытого лота
- * @param int $current_price Текущая цена лота
+ * @param int $currentPrice Текущая цена лота
  * @param array $session Данные из массива $_SESSION
  * @param array $post Данные из массива $_POST
  *

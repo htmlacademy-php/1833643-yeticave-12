@@ -13,8 +13,8 @@ CREATE TABLE `bets`
 CREATE TABLE `categories`
 (
   `id`          int(11) auto_increment,
-  `name`        char(64) NOT NULL,
-  `symbol_code` char(32) NOT NULL,
+  `name`        varchar(255) NOT NULL,
+  `symbol_code` char(32)     NOT NULL,
   PRIMARY KEY (ID)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -26,7 +26,7 @@ CREATE TABLE `lots`
   `updated_at`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `name`            varchar(255) NOT NULL,
   `description`     text,
-  `image_url`       text         NOT NULL,
+  `image_url`       varchar(255) NOT NULL,
   `initial_price`   double       NOT NULL,
   `completion_date` date         NOT NULL,
   `bet_step`        int(11)      NOT NULL,

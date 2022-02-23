@@ -1,7 +1,4 @@
 <?php
-require_once 'helpers.php';
-require_once 'check_err.php';
-require_once 'db.php';
 
 /**
  * @param string $create_at
@@ -69,42 +66,6 @@ function checkPriceLot(array $bet_open_lot, int $start_price_lot): int
 }
 
 /**
- * Проверяет успешность выполнения записи в БД
- * Если нет, выдает ошибку
- *
- *
- * @param mysqli $connection Ресурс соединения
- * @param mysqli_stmt $stmt Подготовленное выражение
- *
- * @return void
- */
-function check_success_insert_or_read_stmt_execute(mysqli $connection, mysqli_stmt $stmt): void
-{
-    if (!mysqli_stmt_execute($stmt)) {
-        $error = mysqli_error($connection);
-        exit("Ошибка MySQL: " . $error);
-    }
-}
-
-/**
- * Читает из БД все, согласно запросу, используя подготовленные выражения
- *
- *
- * @param mysqli $connection Ресурс соединения
- * @param string $query Строка запроса на чтение
- * @param array $data Массив с данными для вставки на место плэйсхолдеров
- *
- * @return array Ассоциативный массив результата запроса
- */
-function db_read_all_stmt(mysqli $connection, string $query, array $data): ?array
-{
-    $stmt = db_get_prepare_stmt($connection, $query, $data);
-    check_success_insert_or_read_stmt_execute($connection, $stmt);
-    $result_query = mysqli_stmt_get_result($stmt);
-    return mysqli_fetch_all($result_query, MYSQLI_ASSOC);
-}
-
-/**
  * Получает разницу между текущим временем и поданным на вход.
  * Данная функция возвращает разницу включая секунды
  *
@@ -150,41 +111,58 @@ function getTimerValue(array $hours_and_minuts): string
     return implode(':', $hours_and_minuts) ?? "";
 }
 
+
 /**
- * @param string $date_create
- * @return string
+ *
+ * @param string $finTime => 'ГГГГ-ММ-ДД'
+ * @return array['$h' => 'string','$m' => 'string'])]
+ *
  */
-function get_dt_range_back(string $date_create): string
+#[ArrayShape (['$h' => 'string', '$m' => 'string'])]
+function countdown(string $finTime): array //однообразил с ключом массива Units
 {
-    $diff = strtotime("now") - strtotime($date_create);
-    $back_time = [floor($diff / 3600), floor(($diff % 3600) / 60)];
-
-    if ($diff < 3600) {
-        return $back_time[1] . get_noun_plural_form($back_time[1], ' минута', ' минуты', ' минут') . ' назад';
+    date_default_timezone_set(TIMEZONE);
+    $deadline = strtotime($finTime);//дата истечения срока
+    $currentTime = time();//текущее время
+    if ($deadline > $currentTime) {
+        $s = $deadline - $currentTime;//осталось секунд до дедлайна
+        $h = floor($s / 60 / 60);//осталось часов
+        $m = floor($s / 60) - ($h * 60);//осталось минут
+        if ($h < 10) {
+            $h = str_pad($h, 2, "0", STR_PAD_LEFT); // Добавляем лидирующий ноль
+        }
+        if ($m < 10) {
+            $m = str_pad($m, 2, "0", STR_PAD_LEFT); // Добавляем лидирующий ноль
+        }
+    } else {
+        $h = $m = '00';//время вышло
     }
-    if ($diff < 86400) {
-        return $back_time[0] . get_noun_plural_form($back_time[0], ' час', ' часа', ' часов') . ' назад';
-    }
 
-    return date('d.m.y в H:i', strtotime($date_create));
+    return [(string)$h, (string)$m];
 }
 
 /**
- * Return category name by id.
- * @param mysqli $con connect to BD.
- * @param string $code category code .
- * @return string category name.
+ * format sum view for example 1 000
+ *
+ * @param int $amount
+ * @return string
  */
-function getCategoryNameByCode(mysqli $con, string $code): string
+function formatAmount(int $amount): string
 {
-    $sql = "SELECT name FROM categories WHERE symbol_code = ?";
-    $stmt = db_get_prepare_stmt($con, $sql, [$code]);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $name = null;
-
-    if ($result && $row = $result->fetch_assoc()) {
-        $name = $row['name'];
+    $amount = ceil($amount);
+    if ($amount >= 1000) {
+        $amount = number_format($amount, 0, ".", " ");
     }
-    return $name;
+    return "{$amount} ₽";
+}
+
+/**
+ * защита от XSS
+ *
+ * @param $string
+ * @return string
+ */
+function e($string)
+{
+    return htmlspecialchars($string);
 }

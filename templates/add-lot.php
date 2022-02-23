@@ -18,7 +18,7 @@
                        value="<?= e(readPOST('lot-name')) ?>">
                 <span class="form__error"><?= isset($errors["lot-name"]) ? $errors["lot-name"] : "" ?></span>
             </div>
-            <div class="form__item <?= $errors["category"] ? "form__item--invalid" : ""; ?>">
+            <div class="form__item <?= $errors["cate  gory"] ? "form__item--invalid" : ""; ?>">
                 <label for="category">Категория <sup>*</sup></label>
                 <select id="category" name="category">
                     <?php foreach ($categories as $category): ?>

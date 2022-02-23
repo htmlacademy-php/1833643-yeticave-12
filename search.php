@@ -4,8 +4,13 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'check_err.php';
 require_once 'db.php';
-$title = 'Вход';
+global $con;
+$title = 'Поиск';
 $numberLotsOnPage = 9;
+$searchResults = array();
+$numberOfSearchedLots = 0;
+$numberOfPage = 0;
+$activePage = 0;
 
 $categories = getCategories($con);
 
@@ -53,9 +58,8 @@ if (isset($_GET['find'])) {  //If there is such a field in GET, then the form ha
 
     }
 } else {  //If the form is not submitted, show the results page without results
+
     $pageContent = include_template('t-search.php', compact('categories', 'errors', 'searchResults', 'numberLotsOnPage', 'numberOfSearchedLots', 'numberOfPage', 'activePage'));
     $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
     print($page);
 }
-
-?>
