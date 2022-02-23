@@ -4,7 +4,7 @@ require_once 'helpers.php';
 require_once 'db.php';
 require_once 'check_err.php';
 require_once 'functions.php';
-
+global $con;
 if (!isset($_GET['id'])) {
     header('Location: pages/404.html');
     die();
@@ -50,7 +50,6 @@ if (isset($_POST['submit_bet'])) {  //If there is such a field in the POST, then
 if (!isset($errors)) {
     $errors = [];
 }
-//$userId = (int)$_SESSION['userId'];
 $item = getUnit($con, $lotId);
 $title = 'Просмотр лота';
 

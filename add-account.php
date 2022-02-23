@@ -2,7 +2,7 @@
 require_once 'helpers.php';
 require_once 'check_err.php';
 require_once 'db.php';
-
+global $con;
 $categories = getCategories($con);
 $title = 'Регистрация нового аккаунта';
 
@@ -16,10 +16,10 @@ $rules = [
         if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             return 'Неверный формат адреса электронной почты. Проверьте введенный email';
         }
-
+        $mail = getPostVal('email');
         $sql_read_email_users = "SELECT users.email FROM users WHERE users.email = ?";
         $stmt = mysqli_prepare($con, $sql_read_email_users);
-        mysqli_stmt_bind_param($stmt, 's', getPostVal('email'));
+        mysqli_stmt_bind_param($stmt, 's', $mail);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $existEmail = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -64,14 +64,15 @@ if (isset($_POST['submit'])) {  //If there is such a field in the POST, then the
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
         $sql = "INSERT INTO users (email, name, password, contacts) VALUES (?, ?, ?, ?)";
-
+        $mail = getPostVal('email');
+        $name = getPostVal('name');
+        $message = getPostVal('message');
         $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, 'ssss', getPostVal('email'), getPostVal('name'), $hash_password, getPostVal('message'));
+        mysqli_stmt_bind_param($stmt, 'ssss', $mail, $name, $hash_password, $message);
         if (!mysqli_stmt_execute($stmt)) {
             $error = mysqli_error($con);
             exit("Ошибка MySQL: " . $error);
         }
-
         //redirect to user personal page
         header('Location: sign-in.php');
     }

@@ -6,6 +6,7 @@
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/flatpickr.min.css" rel="stylesheet">
+
 </head>
 <body>
 <div class="page-wrapper">
@@ -13,15 +14,15 @@
     <header class="main-header">
         <div class="main-header__container container">
             <h1 class="visually-hidden">YetiCave</h1>
-            <a class="main-header__logo" href="index.php">
+            <a class="main-header__logo" href="../index.php">
                 <img src="../img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
             </a>
-            <form class="main-header__search" method="get" action="search.php" autocomplete="off">
+            <form class="main-header__search" method="get" action="../search.php" autocomplete="off">
                 <input type="search" name="search" placeholder="Поиск лота" value="">
                 <input class="main-header__search-btn" type="submit" name="find" value="Найти">
             </form>
             <?php if (isset($_SESSION['userId'])) : ?>
-                <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
+                <a class="main-header__add-lot button" href="../add.php">Добавить лот</a>
             <?php endif; ?>
             <nav class="user-menu">
 
@@ -29,16 +30,16 @@
                 <?php if (isset($_SESSION['userId'])) : ?>
                     <div class="user-menu__logged">
                         <p><?= e($_SESSION['userName']); ?></p>
-                        <a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
-                        <a class="user-menu__logout" href="logout.php">Выход</a>
+                        <a class="user-menu__bets" href="../my-bets.php">Мои ставки</a>
+                        <a class="user-menu__logout" href="../logout.php">Выход</a>
                     </div>
                 <?php else: ?>
                     <ul class="user-menu__list">
                         <li class="user-menu__item">
-                            <a href="add-account.php">Регистрация</a>
+                            <a href="../add-account.php">Регистрация</a>
                         </li>
                         <li class="user-menu__item">
-                            <a href="sign-in.php">Вход</a>
+                            <a href="../sign-in.php">Вход</a>
                         </li>
                     </ul>
                 <?php endif; ?>
@@ -56,7 +57,7 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']); ?></a>
+                    <a href="../index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']); ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -105,7 +106,7 @@
             </a>
         </div>
         <?php if (isset($_SESSION['userId'])) : ?>
-            <a class="main-footer__add-lot button" href="add.php">Добавить лот</a>
+            <a class="main-footer__add-lot button" href="../add.php">Добавить лот</a>
         <?php endif; ?>
         <div class="main-footer__developed-by">
             <span class="visually-hidden">Разработано:</span>
@@ -120,9 +121,7 @@
         </div>
     </div>
 </footer>
-<script src="flatpickr.js"></script>
-<script src="script.js"></script>
-<script src="../flatpickr.js"></script>
-<script src="../script.js"></script>
+<script src="../flatpickr.js?v=1"></script>
+<script src="../script.js?v=1"></script>
 </body>
 </html>

@@ -2,8 +2,8 @@
 require_once 'vendor/autoload.php';
 require_once 'functions.php';
 require_once 'db.php';
-require_once 'config.php';
 
+global $con;
 $winners = calcWinners($con);
 if (!empty($winners)) {
     foreach ($winners as $winner) {
@@ -66,28 +66,29 @@ function setWinners(mysqli $con, array $winners)
  * Send victory message to the user's email
  *
  * @param mysqli $con Connecting to the database.
- * @param array $winners Winner data array [lot id , winner id , lot nameа].
+ * @param array $winners Winner data array [lot id , winner id , lot name].
  */
-
-function sendCongratulations(mysqli $con, array $winners)
+function sendCongratulations(array $winners)
 {
-    $transport = (new Swift_SmtpTransport(SET_HOST, SET_PORT, SET_ENCRYPTION))
-        ->setUsername(SET_FROM)
-        ->setPassword(SET_PASSWORD);
-
-    $text = include_template('email.php', ['winner_arr' => $winners]);
+    // connect ini file
+    $config = parse_ini_file('config.ini', true);
+    $setFrom = $config['post']['setFrom'];
+    $setPassword = $config['post']['setPassword'];
+    $setHost = $config['post']['setHost'];
+    $setPort = $config['post']['setPort'];
+    $setEncryption = $config['post']['setEncryption'];
+    $lotLink = $config['post']['lotLink'];
+    $transport = (new Swift_SmtpTransport($setHost, $setPort, $setEncryption))
+        ->setUsername($setFrom)
+        ->setPassword($setPassword);
+    $text = include_template('email.php', compact('winners', 'lotLink'));
 
     $message = (new Swift_Message())
         ->setSubject('Поздравления от Yeticave')
-        ->setFrom([SET_FROM])
+        ->setFrom([$setFrom])
         ->setTo($winners['winner_mail'])
         ->addPart($text, 'text/html');
 
     $mailer = new Swift_Mailer($transport);
 
-    try {
-        $result = $mailer->send($message);
-    } catch (Exception $e) {
-        echo $e->getMessage();
-    }
 }

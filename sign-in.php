@@ -1,9 +1,8 @@
 <?php
-$con = mysqli_connect("localhost", "root", "root", "yeticave");
 require_once 'helpers.php';
 require_once 'check_err.php';
 require_once 'db.php';
-
+global $con;
 $categories = getCategories($con);
 $title = 'Вход';
 
@@ -18,10 +17,10 @@ $rules = [
         if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             return 'Неверный формат адреса электронной почты. Проверьте введенный email';
         }
-
+        $mail = getPostVal('email');
         $sql = "SELECT email FROM users WHERE email = ?";
         $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, 's', getPostVal('email'));
+        mysqli_stmt_bind_param($stmt, 's', $mail);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $existEmail = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -40,7 +39,8 @@ $rules = [
 
         $sql = "SELECT password FROM users WHERE email = ?";
         $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, 's', getPostVal('email'));
+        $email = getPostVal('email');
+        mysqli_stmt_bind_param($stmt, 's', $email);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $existEmail = mysqli_fetch_assoc($result);
@@ -73,7 +73,8 @@ if (isset($_POST['submit'])) {  //If there is such a field in the POST, then the
     } else {
         $sql = "SELECT id,name FROM users WHERE email = ?";
         $stmt = mysqli_prepare($con, $sql);
-        mysqli_stmt_bind_param($stmt, 's', getPostVal('email'));
+        $email = getPostVal('email');
+        mysqli_stmt_bind_param($stmt, 's', $email);
         mysqli_stmt_execute($stmt);
         $resultUser = mysqli_stmt_get_result($stmt);
         $user = mysqli_fetch_assoc($resultUser);

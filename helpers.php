@@ -1,5 +1,4 @@
 <?php
-define("TIMEZONE", "Europe/Kaliningrad");
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -144,54 +143,3 @@ function include_template($name, array $data = [])
 
     return $result;
 }
-
-
-//защита от XSS
-function e($string)
-{
-    return htmlspecialchars($string);
-}
-
-/**
- *
- * @param string $finTime => 'ГГГГ-ММ-ДД'
- * @return array['$h' => 'string','$m' => 'string'])]
- *
- */
-#[ArrayShape (['$h' => 'string', '$m' => 'string'])]
-function countdown(string $finTime): array //однообразил с ключом массива Units
-{
-    date_default_timezone_set(TIMEZONE);
-    $deadline = strtotime($finTime);//дата истечения срока
-    $currentTime = time();//текущее время
-    if ($deadline > $currentTime) {
-        $s = $deadline - $currentTime;//осталось секунд до дедлайна
-        $h = floor($s / 60 / 60);//осталось часов
-        $m = floor($s / 60) - ($h * 60);//осталось минут
-        if ($h < 10) {
-            $h = str_pad($h, 2, "0", STR_PAD_LEFT); // Добавляем лидирующий ноль
-        }
-        if ($m < 10) {
-            $m = str_pad($m, 2, "0", STR_PAD_LEFT); // Добавляем лидирующий ноль
-        }
-    } else {
-        $h = $m = '00';//время вышло
-    }
-
-    return [(string)$h, (string)$m];
-}
-
-/**
- * @param int $amount
- * @return string
- */
-function formatAmount(int $amount): string
-{
-    $amount = ceil($amount);
-    if ($amount >= 1000) {
-        $amount = number_format($amount, 0, ".", " ");
-    }
-    return "{$amount} ₽";
-}
-
-?>
