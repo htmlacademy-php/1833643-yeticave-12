@@ -1,8 +1,10 @@
 <?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 session_start();
-require_once 'helpers.php';
-require_once('functions.php');
-require_once('db.php');
+require_once 'init.php';
 global $con;
 
 $userId = (int)$_SESSION['userId'];

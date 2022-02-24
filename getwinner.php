@@ -1,4 +1,8 @@
 <?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 require_once 'vendor/autoload.php';
 require_once 'functions.php';
 require_once 'db.php';
@@ -58,7 +62,7 @@ function setWinners(mysqli $con, array $winners)
         printf("Connect failed: %s\n", mysqli_connect_error());
         die();
     } else {
-        sendCongratulations($con, $winners);
+        sendCongratulations($winners);
     }
 }
 

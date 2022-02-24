@@ -59,7 +59,7 @@
                         <?= e(formatAmount($lotsWithMyBet['price_my_bet'])) ?>
                     </td>
                     <td class="rates__time">
-                        <?= get_dt_range_back($lotsWithMyBet['date_create_bet']) ?>
+                        <?= timeAgo($lotsWithMyBet['date_create_bet']) ?>
                         <!-- 5 минут назад -->
                     </td>
                 </tr>

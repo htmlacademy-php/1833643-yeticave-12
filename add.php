@@ -1,10 +1,11 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 $userId = (int)$_SESSION['userId'];
 global $con;
-require_once 'helpers.php';
-require_once 'check_err.php';
-require_once 'db.php';
+require_once 'init.php';
 $title = 'Добавление лота';
 $required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 $errors = array();
@@ -81,11 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["submit"])) {
         // DO NOT USE $_FILES['upfile']['name'] WITHOUT ANY VALIDATION !!
         // On this example, obtain safe unique name from its binary data.
         if (!move_uploaded_file(
-            $_FILES['file']['tmp_name'],
-            sprintf('./uploads/%s.%s',
-                sha1_file($_FILES['file']['tmp_name']),
-                $ext
-            )
+            $_FILES['file']['tmp_name'],'uploads/'.$_FILES['file']['name']
+
         )) {
             throw new RuntimeException('Failed to move uploaded file.');
         }
@@ -114,6 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["submit"])) {
 $categories = getCategories($con);
 
 $pageContent = include_template('add-lot.php', compact('categories', 'errors'));
-$page = include_template('layout.php', compact('categories', 'pageContent','title'));
+$page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
 
 print($page);
