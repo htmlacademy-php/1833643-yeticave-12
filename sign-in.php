@@ -1,7 +1,5 @@
 <?php
-require_once 'helpers.php';
-require_once 'check_err.php';
-require_once 'db.php';
+require_once 'init.php';
 global $con;
 $categories = getCategories($con);
 $title = 'Вход';
