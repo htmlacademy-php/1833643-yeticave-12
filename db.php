@@ -37,12 +37,15 @@ function numberOfSearchedLots_($searchQuery, $con): int
  */
 function searchResults($con, $searchQuery, $numberLotsOnPage, $offset): array
 {
-    $sql = "SELECT lots.id, lots.created_at, lots.name, lots.description, lots.image_url, lots.initial_price, lots.completion_date, lots.bet_step, categories.name AS name_category FROM lots JOIN categories ON lots.categories_id = categories.id WHERE (MATCH(lots.name, lots.description) AGAINST(?)) AND (lots.completion_date > NOW()) ORDER BY lots.completion_date DESC LIMIT ? OFFSET ?";
-    $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, 'sii', $searchQuery, $numberLotsOnPage, $offset);
-    mysqli_stmt_execute($stmt);
-    $result_query_search = mysqli_stmt_get_result($stmt);
-    return mysqli_fetch_all($result_query_search, MYSQLI_ASSOC);
+    if (isset($_GET['find'])){
+        $sql = "SELECT lots.id, lots.created_at, lots.name, lots.description, lots.image_url, lots.initial_price, lots.completion_date, lots.bet_step, categories.name AS name_category FROM lots JOIN categories ON lots.categories_id = categories.id WHERE (MATCH(lots.name, lots.description) AGAINST(?)) AND (lots.completion_date > NOW()) ORDER BY lots.completion_date DESC LIMIT ? OFFSET ?";
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, 'sii', $searchQuery, $numberLotsOnPage, $offset);
+        mysqli_stmt_execute($stmt);
+        $result_query_search = mysqli_stmt_get_result($stmt);
+        return mysqli_fetch_all($result_query_search, MYSQLI_ASSOC);
+    }
+
 }
 
 /**

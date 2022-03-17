@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
 session_start();
 require_once 'init.php';
 global $con;
@@ -8,18 +11,18 @@ $searchResults = array();
 $numberOfSearchedLots = 0;
 $numberOfPage = 0;
 $activePage = 0;
-
+$offset = 0;
 $categories = getCategories($con);
+$searchResults = [];
 
+$errors = [];
 $rules = [
-    'search' => function (): ?string {
-        return validateFilledGET('search');
+    'search' => function () {
+        return validateFilledGet('find');
     }
 ];
 
-$errors = [];
-
-if (isset($_GET['find'])) {  //If there is such a field in GET, then the form has been sent
+if (isset($_GET['search'])) {  //If there is such a field in GET, then the form has been sent
 
     //Validation of relevant fields and saving errors (if any)
     foreach ($_GET as $key => $value) {
@@ -31,11 +34,7 @@ if (isset($_GET['find'])) {  //If there is such a field in GET, then the form ha
     $errors = array_filter($errors);  //removing empty values in the array
 
     //If validation errors, show the search results page
-    if ($errors) {
-        $pageContent = include_template('t-search.php', compact('categories', 'errors'));
-        $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
-        print($page);
-    } else {
+    {
         $searchQuery = trim($_GET['search']);
 
         //get the number of lots found by the search
@@ -43,7 +42,7 @@ if (isset($_GET['find'])) {  //If there is such a field in GET, then the form ha
         $activePage = $_GET['page'] ?? $activePage ?? 1;
 
         //Calculation of parameters for find lots
-        $offset = ((int)$activePage - 1) * $numberLotsOnPage;
+
         $numberOfPage = (int)ceil($numberOfSearchedLots / $numberLotsOnPage);
 
         //Getting limited search list of lots

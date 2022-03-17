@@ -18,7 +18,7 @@
             <span class="form__error"><?php if ($errors): ?>Неверный e-mail или пароль <?php endif; ?></span>
         </div>
         <div
-            class="form__item form__item--last <?php if ($errors['password']): ?> form__item--invalid <?php endif; ?>">
+            class="form__item form__item--last <?php if ($errors): ?> form__item--invalid <?php endif; ?>">
             <label for="password">Пароль <sup>*</sup></label>
             <input id="password" type="password" name="password" placeholder="Введите пароль"
                    value="<?= getFilteredPostVal('password'); ?>">

@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
 require_once 'init.php';
 global $con;
 $categories = getCategories($con);
@@ -64,6 +67,7 @@ if (isset($_POST['submit'])) {  //If there is such a field in the POST, then the
     }
     $errors = array_filter($errors);  //removing empty values in the array
     //If there were validation errors, we return to the page for adding a new account with errors displayed.
+    print_r($errors);
     if ($errors) {
         $pageContent = include_template('login.php', compact('categories', 'errors'));
         $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));

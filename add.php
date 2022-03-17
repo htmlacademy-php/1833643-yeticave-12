@@ -1,5 +1,6 @@
 <?php
-ini_set('display_errors', 1);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
 session_start();
@@ -82,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["submit"])) {
         // DO NOT USE $_FILES['upfile']['name'] WITHOUT ANY VALIDATION !!
         // On this example, obtain safe unique name from its binary data.
         if (!move_uploaded_file(
-            $_FILES['file']['tmp_name'],'uploads/'.$_FILES['file']['name']
+            $_FILES['file']['tmp_name'], 'uploads/' . $_FILES['file']['name']
 
         )) {
             throw new RuntimeException('Failed to move uploaded file.');
