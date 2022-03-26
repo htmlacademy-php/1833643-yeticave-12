@@ -15,14 +15,15 @@
             <label for="email">E-mail <sup>*</sup></label>
             <input id="email" type="text" name="email" placeholder="Введите e-mail"
                    value="<?= getFilteredPostVal('email'); ?>">
-            <span class="form__error"><?php if ($errors): ?>Неверный e-mail или пароль <?php endif; ?></span>
+            <span class="form__error"><?php if (isset($errors['email'])): echo $errors['email'] ?><?php endif; ?></span>
         </div>
         <div
             class="form__item form__item--last <?php if ($errors): ?> form__item--invalid <?php endif; ?>">
             <label for="password">Пароль <sup>*</sup></label>
             <input id="password" type="password" name="password" placeholder="Введите пароль"
                    value="<?= getFilteredPostVal('password'); ?>">
-            <span class="form__error"><?php if ($errors): ?>Неверный e-mail или пароль <?php endif; ?></span>
+            <span
+                class="form__error"><?php if (isset($errors['password'])): echo $errors['password'] ?><?php endif; ?></span>
         </div>
         <button type="submit" name="submit" class="button">Войти</button>
     </form>
