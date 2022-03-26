@@ -6,7 +6,7 @@ require_once 'init.php';
 global $con;
 $categories = getCategories($con);
 $title = 'Вход';
-
+$errors = [];
 
 $rules = [
     'email' => function () use ($con): ?string {
@@ -14,7 +14,6 @@ $rules = [
         if ($error) {
             return $error;
         }
-
         if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             return 'Неверный формат адреса электронной почты. Проверьте введенный email';
         }
@@ -37,7 +36,6 @@ $rules = [
         if ($error) {
             return $error;
         }
-
         $sql = "SELECT password FROM users WHERE email = ?";
         $stmt = mysqli_prepare($con, $sql);
         $email = getPostVal('email');
@@ -45,16 +43,16 @@ $rules = [
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $existEmail = mysqli_fetch_assoc($result);
+        if ($existEmail) {
+            if (!password_verify(getPostVal('password'), $existEmail['password'])) {
+                return 'Вы ввели неверный пароль';
+            }
 
-        if (!password_verify(getPostVal('password'), $existEmail['password'])) {
-            return 'Вы ввели неверный пароль';
         }
 
         return NULL;
     }
 ];
-
-$errors = [];
 
 if (isset($_POST['submit'])) {  //If there is such a field in the POST, then the form has been sent
 
@@ -67,7 +65,6 @@ if (isset($_POST['submit'])) {  //If there is such a field in the POST, then the
     }
     $errors = array_filter($errors);  //removing empty values in the array
     //If there were validation errors, we return to the page for adding a new account with errors displayed.
-    print_r($errors);
     if ($errors) {
         $pageContent = include_template('login.php', compact('categories', 'errors'));
         $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
