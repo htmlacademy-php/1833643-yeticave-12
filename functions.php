@@ -164,5 +164,8 @@ function formatAmount(int $amount): string
  */
 function e($string):string
 {
-    return htmlspecialchars($string);
+    if (isset($string)){
+        return htmlspecialchars($string);
+    }
+    return null;
 }

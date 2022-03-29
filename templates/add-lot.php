@@ -8,7 +8,7 @@
             <?php endforeach; ?>
         </ul>
     </nav>
-    <form class="form form--add-lot container <?= $errors ? "form--invalid" : ''; ?>" action="../add.php" method="POST"
+    <form class="form form--add-lot container <?= isset($errors) ? "form--invalid" : ''; ?>" action="../add.php" method="POST"
           enctype="multipart/form-data">
         <h2>Добавление лота</h2>
         <div class="form__container-two">
@@ -18,7 +18,7 @@
                        value="<?= e(readPOST('lot-name')) ?>">
                 <span class="form__error"><?= isset($errors["lot-name"]) ? $errors["lot-name"] : "" ?></span>
             </div>
-            <div class="form__item <?= $errors["category"] ? "form__item--invalid" : ""; ?>">
+            <div class="form__item <?= isset($errors["category"]) ? "form__item--invalid" : ""; ?>">
                 <label for="category">Категория <sup>*</sup></label>
                 <select id="category" name="category">
                     <?php foreach ($categories as $category): ?>
@@ -26,7 +26,7 @@
                             value="<?= $category['id'] ?>" <?= $category['id'] == readPOST('category') ? "selected" : "" ?>><?= $category['name'] ?></option>
                     <?php endforeach; ?>
                 </select>
-                <span class="form__error"><?= ($errors["category"]) ?? "" ?></span>
+                <span class="form__error"><?= (isset($errors["category"])) ? $errors["category"] : "" ?></span>
             </div>
         </div>
         <div class="form__item form__item--wide <?= isset($errors["message"]) ? "form__item--invalid" : ""; ?>">
@@ -64,7 +64,7 @@
             </div>
         </div>
         <span
-            class="form__error form__error--bottom"><?= $errors ? "Пожалуйста, исправьте ошибки в форме." : ""; ?></span>
+            class="form__error form__error--bottom"><?= isset($errors) ? "Пожалуйста, исправьте ошибки в форме." : ""; ?></span>
         <button type="submit" class="button" name="submit">Добавить лот</button>
     </form>
 </main>

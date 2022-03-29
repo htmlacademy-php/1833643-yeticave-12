@@ -21,7 +21,7 @@
             <div class="lot-item__right">
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer
-                        <?= $countdown = countdown($item['completion_date']); ?>
+                        <?php $countdown = countdown($item['completion_date']); ?>
                         <?= ($countdown[0]) === '00' ? 'timer--finishing' : '' ?>">
                         <?= e($countdown[0]); ?>:
                         <?= e($countdown[1]); ?>
