@@ -162,7 +162,7 @@ function formatAmount(int $amount): string
  * @param $string
  * @return string
  */
-function e($string):string
+function e($string):?string
 {
     if (isset($string)){
         return htmlspecialchars($string);
