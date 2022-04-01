@@ -33,11 +33,11 @@ function numberOfSearchedLots_($searchQuery, $con): int
  * @param $searchQuery
  * @param $numberLotsOnPage
  * @param $offset
- * @return array
+ * @return ?array
  */
-function searchResults($con, $searchQuery, $numberLotsOnPage, $offset): array
+function searchResults($con, $searchQuery, $numberLotsOnPage, $offset): ?array
 {
-    if (isset($_GET['find'])){
+    if (isset($_GET['find'])) {
         $sql = "SELECT lots.id, lots.created_at, lots.name, lots.description, lots.image_url, lots.initial_price, lots.completion_date, lots.bet_step, categories.name AS name_category FROM lots JOIN categories ON lots.categories_id = categories.id WHERE (MATCH(lots.name, lots.description) AGAINST(?)) AND (lots.completion_date > NOW()) ORDER BY lots.completion_date DESC LIMIT ? OFFSET ?";
         $stmt = mysqli_prepare($con, $sql);
         mysqli_stmt_bind_param($stmt, 'sii', $searchQuery, $numberLotsOnPage, $offset);
@@ -45,7 +45,7 @@ function searchResults($con, $searchQuery, $numberLotsOnPage, $offset): array
         $result_query_search = mysqli_stmt_get_result($stmt);
         return mysqli_fetch_all($result_query_search, MYSQLI_ASSOC);
     }
-
+    return null;
 }
 
 /**
@@ -83,11 +83,31 @@ function checkId(mysqli $con, $id)
     $stmt = db_get_prepare_stmt($con, $sql, [$id]);
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
-    //if (mysqli_num_rows($res) == 0) {
     if (mysqli_num_rows($res) === 0) {
         header('Location: pages/404.html');
     }
 }
+
+/**
+ * @param $con
+ * @param $lotId
+ * @param $userId
+ * @return true/false
+ */
+
+function checkMyLot($con, $lotId,$userId) :bool
+{
+    $sql = "SELECT id FROM lots WHERE id = ? and author_users_id = ? ";
+    $stmt = db_get_prepare_stmt($con, $sql, [$lotId, $userId]);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($res) === 0) {
+        return false;
+    }else{
+        return true;
+    }
+}
+
 
 /**
  * @param mysqli $con
@@ -155,12 +175,13 @@ WHERE (bets.users_id = ?) ORDER BY bets.created_at DESC";
  * Get current lot data
  * @param $connection
  * @param $lotId
- * @return array|false|string[]|null
+ * @return array|false|string[]|void|null
  */
 
 function openLot($connection, $lotId)
 {
     $sql = "SELECT
+       lots.id,
        lots.created_at,
        lots.name,
        lots.description,

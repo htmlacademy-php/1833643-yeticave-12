@@ -10,8 +10,15 @@ if (!isset($_GET['id'])) {
     die();
 }
 
+$userId = $_SESSION['userId'] ?? null;
 $lotId = initOpenLot($_GET, $_SESSION);
 checkId($con, $lotId);
+$enableLot = false;//default
+if ($userId == null) {
+    $blockLot = true;
+} else {
+    $blockLot = checkMyLot($con, $lotId, $userId);
+}
 
 $categories = getCategories($con);
 
@@ -26,7 +33,7 @@ $openBets = openBets($con, $lotId);
 $currentPrice = checkPriceLot($openBets, (int)$openLot['initial_price']);
 
 if (isset($_POST['submit_bet'])) {  //If there is such a field in the POST, then the form has been sent
-    $errors = validateBetsForm($openLot, $currentPrice, $_SESSION, $_POST);
+    $errors = validateBetsForm($con, $openLot, $currentPrice, $_SESSION, $_POST);
 
     //If validation errors, return to the page for adding a new bet with errors displayed.
     if (!$errors) {
@@ -53,7 +60,7 @@ if (!isset($errors)) {
 $item = getUnit($con, $lotId);
 $title = 'Просмотр лота';
 
-$pageContent = include_template('t-lot.php', compact('categories', 'item', 'openLot', 'openBets', 'errors', 'currentPrice'));
+$pageContent = include_template('t-lot.php', compact('categories', 'item', 'openLot', 'openBets', 'errors', 'currentPrice', 'blockLot'));
 $page = include_template('layout.php', compact('categories', 'pageContent', 'title'));
 
 print($page);

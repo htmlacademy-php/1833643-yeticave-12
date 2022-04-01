@@ -6,7 +6,6 @@ error_reporting(E_ALL);
 session_start();
 require_once 'init.php';
 global $con;
-
 $userId = (int)$_SESSION['userId'];
 $categories = getCategories($con);
 $lotsWithMyBets = getAllLotsWithMyBets($con, $userId);

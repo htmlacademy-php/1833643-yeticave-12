@@ -1,14 +1,14 @@
 <main>
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach ($categories as $category): ?>
+            <?php if (isset($categories)): foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']) ?></a>
+                    <a href="/index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']) ?></a>
                 </li>
-            <?php endforeach; ?>
+            <?php endforeach; endif; ?>
         </ul>
     </nav>
-    <form class="form container <?php if (isset($errors)): ?> form--invalid <?php endif; ?>" action="add-account.php"
+    <form class="form container <?php if (isset($errors)): ?> form--invalid <?php endif; ?>" action="/add-account.php"
           method="post" autocomplete="off">
         <h2>Регистрация нового аккаунта</h2>
         <div class="form__item <?php if (isset($errors['email'])): ?> form__item--invalid <?php endif; ?>">
