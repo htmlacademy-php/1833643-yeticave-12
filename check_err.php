@@ -1,5 +1,5 @@
 <?php
-
+global $con;
 /**
  * @param $name
  * @param $min
@@ -53,7 +53,7 @@ function filteredGET(string $name): string
  * @return string|null - возвращает текст ошибки или null если все правильно
  */
 
-function validateDate()
+function validateDate(): ?string
 {
     $post_date = $_POST['lot-date'];
     $timestamp_post_date = strtotime($post_date);
@@ -86,9 +86,9 @@ function validateNaturalNum($num)
 
 /**
  * @param $key
- * @return mixed|null
+ * @return string|null
  */
-function readPOST($key)
+function readPOST($key): ?string
 {
     if (isset($_POST[$key]) && $_POST[$key]) {
         if (empty($_POST[$key])) {
@@ -129,7 +129,7 @@ function getFilteredPostVal(string $name): string
  *
  * @return ?string Текст ошибки или NULL
  */
-function validate_field_cost(array $openLot, int $currentPrice, array $session, array $post): ?string
+function validate_field_cost($con, array $openLot, int $currentPrice, array $session, array $post): ?string
 {
     $error = validateFilled('cost');
     if ($error) {
@@ -141,11 +141,20 @@ function validate_field_cost(array $openLot, int $currentPrice, array $session, 
     if ($post['cost'] <= 0 || !is_numeric($post['cost'])) {
         return 'Начальная цена должна быть целым числом больше нуля';
     }
-
     $min_bet = $currentPrice + (int)$openLot['bet_step'];
     if ((int)$post['cost'] < $min_bet) {
         return 'Мин.ставка д.б. не менее ' . $min_bet . ' ₽';
     }
+    $lotId=(int)$openLot['id'];
+    $userId=$session['userId'] ?? null;
+    $sql = "SELECT id FROM bets WHERE lots_id = ? and users_id=?";
+    $stmt = db_get_prepare_stmt($con, $sql, [$lotId,$userId]);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($res) >= 1) {
+        return 'Вы можете сделать только 1 ставку';
+    }
+
 
     return NULL;
 }
@@ -160,9 +169,9 @@ function validate_field_cost(array $openLot, int $currentPrice, array $session, 
  *
  * @return array Возвращает массив с ошибками, или пустой массив, если ошибок нет
  */
-function validateBetsForm(array $openLot, int $currentPrice, array $session, array $post): array
+function validateBetsForm($con, array $openLot, int $currentPrice, array $session, array $post): array
 {
-    $errors_validate['cost'] = validate_field_cost($openLot, $currentPrice, $session, $post);
+    $errors_validate['cost'] = validate_field_cost($con, $openLot, $currentPrice, $session, $post);
 
     return array_filter($errors_validate);  //убираем пустые значения в массиве и возвращаем его
 }

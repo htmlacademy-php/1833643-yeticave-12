@@ -69,7 +69,6 @@ function setWinners(mysqli $con, array $winners)
 /**
  * Send victory message to the user's email
  *
- * @param mysqli $con Connecting to the database.
  * @param array $winners Winner data array [lot id , winner id , lot name].
  */
 function sendCongratulations(array $winners)

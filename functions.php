@@ -157,12 +157,13 @@ function formatAmount(int $amount): string
 }
 
 /**
- * защита от XSS
- *
  * @param $string
- * @return string
+ * @return string|null
  */
-function e($string):string
+function e($string):?string
 {
-    return htmlspecialchars($string);
+    if (isset($string)){
+        return htmlspecialchars($string);
+    }
+    return null;
 }

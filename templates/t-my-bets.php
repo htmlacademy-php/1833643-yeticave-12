@@ -1,19 +1,19 @@
 <main>
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach ($categories as $category): ?>
+            <?php if (isset($categories)): foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']) ?></a>
+                    <a href="/index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']) ?></a>
                 </li>
-            <?php endforeach; ?>
+            <?php endforeach;endif; ?>
         </ul>
     </nav>
     <section class="rates container">
         <h2>Мои ставки</h2>
         <table class="rates__list">
-            <?php foreach ($lotsWithMyBets as $lotsWithMyBet): ?>
+            <?php if (isset($lotsWithMyBets)): foreach ($lotsWithMyBets as $lotsWithMyBet): ?>
                 <?php $hours_and_minuts_with_seconds = get_dt_range_with_seconds($lotsWithMyBet['completion_date']);
-
+                $class_item = "";
                 if (!isset($lotsWithMyBet['winner_users_id'])) {
                     $lotsWithMyBet['winner_users_id'] = 0;
                 }
@@ -41,7 +41,7 @@
                         </div>
                         <div>
                             <h3 class="rates__title"><a
-                                    href="/lot.php?id=<?= $lotsWithMyBet['lot_Id'] ?>"><?= e($lotsWithMyBet['name']) ?></a>
+                                    href="/lot.php?id=<?= $lotsWithMyBet['lot_id'] ?>"><?= e($lotsWithMyBet['name']) ?></a>
                             </h3>
 
 
@@ -63,7 +63,7 @@
                         <!-- 5 минут назад -->
                     </td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endforeach;endif; ?>
         </table>
     </section>
 </main>

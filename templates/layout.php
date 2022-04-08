@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?= $title ?></title>
+    <title><?= $title ?? '' ?></title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
     <link href="../css/flatpickr.min.css" rel="stylesheet">
@@ -47,7 +47,7 @@
         </div>
     </header>
     <main class="container">
-        <?= $pageContent; ?>
+        <?php if (isset($pageContent)): echo $pageContent; endif;?>
     </main>
 </div>
 
@@ -55,11 +55,11 @@
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($categories as $category): ?>
+            <?php if (isset($categories)): foreach ($categories as $category): ?>
                 <li class="nav__item">
                     <a href="../index.php?category=<?= $category['symbol_code'] ?>"><?= e($category['name']); ?></a>
                 </li>
-            <?php endforeach; ?>
+            <?php endforeach; endif ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">
